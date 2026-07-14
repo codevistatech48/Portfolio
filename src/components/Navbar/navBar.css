@@ -1,0 +1,160 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: #080b18;
+    font-family: "Inter", sans-serif;
+}
+
+/* ================= NAVBAR ================= */
+
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+
+    width: 100%;
+    height: 90px;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    padding: 0 70px;
+
+    background: rgba(8, 11, 24, 0.92);
+    backdrop-filter: blur(18px);
+
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+
+    z-index: 1000;
+}
+
+/* ================= LOGO ================= */
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    text-decoration: none;
+}
+
+.logo-icon {
+    width: 55px;
+    height: 55px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    border-radius: 14px;
+
+    overflow: hidden;
+}
+
+.logo-img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.logo h2 {
+    color: white;
+    font-size: 32px;
+    font-weight: 700;
+}
+
+.logo h2 span {
+    color: #6D5DFB;
+}
+
+/* ================= LINKS ================= */
+
+.links {
+    display: flex;
+    align-items: center;
+    gap: 40px;
+}
+
+.links a {
+    color: #B6BCC9;
+    text-decoration: none;
+    font-size: 18px;
+    font-weight: 500;
+
+    transition: 0.3s;
+}
+
+.links a:hover {
+    color: white;
+}
+
+.links .active {
+    background: rgba(255,255,255,.08);
+
+    color: white;
+
+    padding: 12px 22px;
+
+    border-radius: 14px;
+}
+
+/* ================= BUTTONS ================= */
+
+.buttons {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+}
+
+.login-btn {
+    padding: 14px 26px;
+
+    border-radius: 14px;
+
+    border: 1px solid rgba(255,255,255,.12);
+
+    background: transparent;
+
+    color: white;
+
+    cursor: pointer;
+
+    font-size: 16px;
+
+    transition: .3s;
+}
+
+.login-btn:hover {
+    border-color: #6D5DFB;
+}
+
+.quote-btn {
+    padding: 14px 30px;
+
+    border: none;
+
+    border-radius: 14px;
+
+    background: linear-gradient(90deg,#6D5DFB,#C026D3);
+
+    color: white;
+
+    font-size: 16px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition: .3s;
+
+    box-shadow: 0 10px 30px rgba(109,93,251,.35);
+}
+
+.quote-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 35px rgba(109,93,251,.5);
+}

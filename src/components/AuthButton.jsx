@@ -1,25 +1,23 @@
-import { Link } from "react-router-dom";
-
 function AuthButton() {
   const token = localStorage.getItem("userToken");
 
   const handleLogout = () => {
     localStorage.removeItem("userToken");
-    window.location.href = "/login";
+    window.location.reload();
   };
 
+  if (token) {
+    return (
+      <button className="login-btn" onClick={handleLogout}>
+        Logout
+      </button>
+    );
+  }
+
   return (
-    <>
-      {token ? (
-        <button onClick={handleLogout}>
-          Logout
-        </button>
-      ) : (
-        <Link to="/login">
-          <button>Login</button>
-        </Link>
-      )}
-    </>
+    <button className="login-btn">
+      Sign In
+    </button>
   );
 }
 

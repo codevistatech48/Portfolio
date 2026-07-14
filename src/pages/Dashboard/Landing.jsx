@@ -1,14 +1,15 @@
-import Footer from "../../components/footer";
-import NavBar from "../../components/navBar";
+import Footer from "../../components/Footer/footer";
+import NavBar from "../../components/Navbar/navBar";
+import Hero from "../Hero/hero";
 
 function Landing() {
-    return (
-        <div>
-            <NavBar/>
-            <h1>Welcome to the Dashboard</h1>
-            <Footer />
-        </div>
-    );
+  return (
+    <>
+      <NavBar />
+    <Hero />
+      <Footer />
+    </>
+  );
 }
 
 export default Landing;

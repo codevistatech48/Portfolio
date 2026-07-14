@@ -1,0 +1,1032 @@
+/* ========================= */
+/* HERO SECTION */
+/* ========================= */
+
+.hero{
+    min-height:100vh;
+
+    margin:auto;
+
+    display:grid;
+    grid-template-columns:55% 45%;
+
+    align-items:center;
+
+    gap:40px;
+
+    padding:120px 80px 80px;
+
+    position:relative;
+
+    overflow:hidden;
+}
+
+/* Background Glow */
+
+.hero::before{
+
+    content:"";
+
+    position:absolute;
+
+    width:600px;
+    height:600px;
+
+    border-radius:50%;
+
+    right:-200px;
+    top:-150px;
+
+    background:radial-gradient(circle,
+        rgba(124,58,237,.22),
+        transparent 70%);
+
+    filter:blur(60px);
+
+    z-index:-1;
+}
+
+.hero::after{
+
+    content:"";
+
+    position:absolute;
+
+    width:500px;
+    height:500px;
+
+    border-radius:50%;
+
+    left:-200px;
+    bottom:-180px;
+
+    background:radial-gradient(circle,
+        rgba(217,70,239,.16),
+        transparent 70%);
+
+    filter:blur(60px);
+
+    z-index:-1;
+}
+
+/* ========================= */
+/* LEFT SIDE */
+/* ========================= */
+
+.hero-left{
+
+    display:flex;
+
+    flex-direction:column;
+
+    justify-content:center;
+
+    z-index:5;
+}
+
+.hero-badge{
+
+    display:inline-flex;
+
+    align-items:center;
+
+    gap:10px;
+
+    width:max-content;
+
+    padding:12px 22px;
+
+    border-radius:999px;
+
+    background:rgba(124,58,237,.12);
+
+    border:1px solid rgba(124,58,237,.28);
+
+    color:#C4B5FD;
+
+    font-size:15px;
+
+    font-weight:500;
+
+    margin-bottom:35px;
+}
+
+.hero h1{
+
+    font-size:78px;
+
+    font-weight:800;
+
+    line-height:1.05;
+
+    color:white;
+
+    margin-bottom:30px;
+}
+
+.hero h1 span{
+
+    background:linear-gradient(90deg,#7C3AED,#D946EF);
+
+    background-clip:text;
+
+    -webkit-background-clip:text;
+
+    -webkit-text-fill-color:transparent;
+}
+
+.hero p{
+
+    font-size:22px;
+
+    color:#94A3B8;
+
+    line-height:1.8;
+
+    max-width:640px;
+
+    margin-bottom:45px;
+}
+
+/* ========================= */
+/* BUTTONS */
+/* ========================= */
+
+.hero-buttons{
+
+    display:flex;
+
+    gap:18px;
+
+    align-items:center;
+}
+
+.primary-btn{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:10px;
+
+    padding:18px 34px;
+
+    border:none;
+
+    border-radius:18px;
+
+    background:linear-gradient(90deg,#7C3AED,#D946EF);
+
+    color:white;
+
+    font-size:17px;
+
+    font-weight:600;
+
+    cursor:pointer;
+
+    transition:.35s;
+
+    box-shadow:0 18px 35px rgba(124,58,237,.35);
+}
+
+.primary-btn:hover{
+
+    transform:translateY(-4px);
+
+    box-shadow:0 24px 45px rgba(124,58,237,.45);
+}
+
+.secondary-btn{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:10px;
+
+    padding:18px 32px;
+
+    border-radius:18px;
+
+    background:transparent;
+
+    border:1px solid rgba(255,255,255,.08);
+
+    color:white;
+
+    cursor:pointer;
+
+    transition:.35s;
+}
+
+.secondary-btn:hover{
+
+    background:rgba(255,255,255,.05);
+
+    border-color:#7C3AED;
+}
+/* ========================= */
+/* RIGHT SIDE */
+/* ========================= */
+
+.hero-right{
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    position:relative;
+
+    min-height:760px;
+
+    perspective:1800px;
+
+    transform-style:preserve-3d;
+}
+
+/* ========================= */
+/* MAIN VISUAL */
+/* ========================= */
+
+/* .hero-visual{
+
+    position:relative;
+
+    width:720px;
+
+    height:720px;
+
+    transform-style:preserve-3d;
+} */
+.hero-visual{
+
+    position:relative;
+
+    width:720px;
+
+    height:720px;
+
+    transform-style:preserve-3d;
+
+    isolation:isolate;
+}
+/* ========================= */
+/* ORBIT RINGS */
+/* ========================= */
+
+.hero-visual-ring{
+
+    position:absolute;
+
+    border-radius:50%;
+
+    border:1px solid rgba(124,58,237,.12);
+
+    box-shadow:0 0 60px rgba(124,58,237,.08);
+
+    transform-style:preserve-3d;
+}
+
+.hero-visual-ring-a{
+
+    width:560px;
+
+    height:560px;
+
+    left:80px;
+
+    top:80px;
+
+    transform:rotateX(72deg);
+
+    animation:ringRotate 30s linear infinite;
+}
+
+.hero-visual-ring-b{
+
+    width:420px;
+
+    height:420px;
+
+    left:150px;
+
+    top:150px;
+
+    border-color:rgba(217,70,239,.12);
+
+    box-shadow:0 0 60px rgba(217,70,239,.06);
+
+    animation:ringRotateReverse 22s linear infinite;
+}
+
+/* ========================= */
+/* 3D CARD */
+/* ========================= */
+
+/* .hero-tilt-card{
+
+    position:absolute;
+
+    top:60px;
+
+    left:60px;
+
+    width:600px;
+
+    height:600px;
+
+    border-radius:34px;
+
+    overflow:hidden;
+
+    background:linear-gradient(
+        180deg,
+        rgba(18,24,40,.96),
+        rgba(8,11,24,.94)
+    );
+
+    border:1px solid rgba(255,255,255,.08);
+
+    box-shadow:
+        0 40px 100px rgba(0,0,0,.45),
+        0 0 100px rgba(124,58,237,.12);
+
+    transform-style:preserve-3d;
+
+    transform:
+        rotateX(12deg)
+        rotateY(-14deg)
+        rotateZ(-2deg);
+
+    transition:.6s cubic-bezier(.25,.46,.45,.94);
+} */
+ .hero-tilt-card{
+
+    position:absolute;
+
+    top:60px;
+
+    left:60px;
+
+    width:600px;
+
+    height:600px;
+
+    border-radius:34px;
+
+    overflow:hidden;
+
+    background:linear-gradient(
+        180deg,
+        rgba(18,24,40,.96),
+        rgba(8,11,24,.94)
+    );
+
+    border:1px solid rgba(255,255,255,.08);
+
+    box-shadow:
+        0 40px 100px rgba(0,0,0,.45),
+        0 0 100px rgba(124,58,237,.12);
+
+    transform-style:preserve-3d;
+
+    transform:
+        rotateX(12deg)
+        rotateY(-14deg)
+        rotateZ(-2deg);
+
+    transition:.6s cubic-bezier(.25,.46,.45,.94);
+
+    z-index:1;
+}
+
+/* .hero-tilt-card:hover{
+
+    transform:
+        rotateX(8deg)
+        rotateY(-8deg)
+        rotateZ(0deg)
+        translateY(-12px);
+
+    box-shadow:
+        0 50px 140px rgba(124,58,237,.32),
+        0 0 120px rgba(217,70,239,.18);
+} */
+
+/* ========================= */
+/* GRID OVERLAY */
+/* ========================= */
+
+/* .hero-tilt-card::before{
+
+    content:"";
+
+    position:absolute;
+
+    inset:0;
+
+    background-image:
+
+    linear-gradient(
+        rgba(255,255,255,.04) 1px,
+        transparent 1px),
+
+    linear-gradient(
+        90deg,
+        rgba(255,255,255,.04) 1px,
+        transparent 1px);
+
+    background-size:34px 34px;
+
+    opacity:.25;
+
+    pointer-events:none;
+} */
+
+/* ========================= */
+/* HEADER */
+/* ========================= */
+
+.hero-tilt-header{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    padding:22px;
+
+    gap:14px;
+
+    position:relative;
+
+    z-index:2;
+}
+
+/* ========================= */
+/* CHIPS */
+/* ========================= */
+
+.hero-chip{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:8px;
+
+    padding:10px 14px;
+
+    border-radius:999px;
+
+    background:rgba(255,255,255,.05);
+
+    border:1px solid rgba(255,255,255,.08);
+
+    color:#E5E7EB;
+
+    font-size:13px;
+
+    font-weight:600;
+}
+
+.hero-chip-accent{
+
+    background:rgba(124,58,237,.18);
+
+    color:#DDD6FE;
+}
+
+/* ========================= */
+/* IMAGE */
+/* ========================= */
+
+.hero-image-wrap{
+
+    position:relative;
+
+    margin:0 22px;
+
+    height:420px;
+
+    border-radius:26px;
+
+    overflow:hidden;
+
+    background:#0B1120;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    border:1px solid rgba(255,255,255,.08);
+}
+
+.hero-image{
+
+    width:100%;
+
+    height:100%;
+
+    object-fit:contain;
+
+    display:block;
+
+    filter:brightness(1.05) contrast(1.08);
+}
+
+.hero-image{
+
+    width:112%;
+
+    height:112%;
+
+    object-fit:contain;
+
+    transform:
+        translateX(18px)
+        translateY(10px);
+
+    filter:
+        drop-shadow(
+            0 20px 40px rgba(0,0,0,.4)
+        );
+}
+
+/* ========================= */
+/* GLOW */
+/* ========================= */
+
+.hero-image-glow{
+
+    position:absolute;
+
+    bottom:-30px;
+
+    left:50%;
+
+    transform:translateX(-50%);
+
+    width:70%;
+
+    height:120px;
+
+    background:radial-gradient(
+        circle,
+        rgba(124,58,237,.55),
+        transparent 70%
+    );
+
+    filter:blur(20px);
+}
+
+/* ========================= */
+/* FOOTER */
+/* ========================= */
+
+.hero-tilt-footer{
+
+    display:flex;
+
+    gap:16px;
+
+    padding:20px 22px;
+}
+
+.hero-mini-stat{
+
+    flex:1;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:10px;
+
+    padding:14px;
+
+    border-radius:18px;
+
+    background:rgba(255,255,255,.05);
+
+    border:1px solid rgba(255,255,255,.08);
+
+    color:#E5E7EB;
+
+    font-size:14px;
+}/* =======================================
+   FLOATING STAT CARDS
+======================================= */
+
+/* .floating-stat{
+
+    position:absolute;
+
+    width:190px;
+
+    padding:22px;
+
+    border-radius:24px;
+
+    background:rgba(17,24,39,.88);
+
+    backdrop-filter:blur(18px);
+
+    border:1px solid rgba(255,255,255,.08);
+
+    box-shadow:
+        0 25px 60px rgba(0,0,0,.35);
+
+    animation:floatCard 5s ease-in-out infinite;
+
+    z-index:10;
+} */
+
+.floating-stat{
+
+    position:absolute;
+
+    width:190px;
+
+    padding:22px;
+
+    border-radius:24px;
+
+    background:rgba(17,24,39,.88);
+
+    backdrop-filter:blur(18px);
+
+    border:1px solid rgba(255,255,255,.08);
+
+    box-shadow:
+        0 25px 60px rgba(0,0,0,.35);
+
+    animation:floatCard 5s ease-in-out infinite;
+
+    z-index:999;
+}
+.floating-stat h2{
+
+    color:white;
+
+    font-size:46px;
+
+    margin-bottom:6px;
+
+    font-weight:700;
+}
+
+.floating-stat p{
+
+    color:#94A3B8;
+
+    font-size:15px;
+
+    margin:0;
+}
+
+/* .floating-stat-one{
+
+    top:50px;
+
+    right:-80px;
+} */
+
+.floating-stat-one{
+
+    top:70px;
+
+    right:-115px;
+}
+/* .floating-stat-two{
+
+    bottom:120px;
+
+    left:-80px;
+
+    animation-delay:-2.5s;
+} */
+.floating-stat-two{
+
+    bottom:110px;
+
+    left:-90px;
+
+    animation-delay:-2.5s;
+}
+/* =======================================
+   ANIMATIONS
+======================================= */
+
+@keyframes heroFloat{
+
+    0%{
+        transform:
+            translateY(0px)
+            rotateX(0deg);
+    }
+
+    50%{
+        transform:
+            translateY(-18px)
+            rotateX(1deg);
+    }
+
+    100%{
+        transform:
+            translateY(0px)
+            rotateX(0deg);
+    }
+}
+
+@keyframes ringRotate{
+
+    from{
+
+        transform:
+            rotateX(72deg)
+            rotateZ(0deg);
+    }
+
+    to{
+
+        transform:
+            rotateX(72deg)
+            rotateZ(360deg);
+    }
+}
+
+@keyframes ringRotateReverse{
+
+    from{
+
+        transform:
+            rotateX(72deg)
+            rotateZ(360deg);
+    }
+
+    to{
+
+        transform:
+            rotateX(72deg)
+            rotateZ(0deg);
+    }
+}
+
+@keyframes floatCard{
+
+    0%{
+
+        transform:translateY(0);
+
+        opacity:1;
+    }
+
+    50%{
+
+        transform:translateY(-20px);
+
+        opacity:1;
+    }
+
+    100%{
+
+        transform:translateY(0);
+
+        opacity:1;
+    }
+}
+
+/* =======================================
+   BUTTON EFFECTS
+======================================= */
+
+.primary-btn:hover{
+
+    transform:translateY(-4px);
+
+    box-shadow:
+
+        0 25px 50px rgba(124,58,237,.45);
+}
+
+.secondary-btn:hover{
+
+    background:rgba(255,255,255,.05);
+
+    border-color:#7C3AED;
+
+    transform:translateY(-4px);
+}
+
+/* =======================================
+   CARD HOVER
+======================================= */
+
+.hero-tilt-card:hover{
+
+
+    box-shadow:
+
+        0 45px 120px rgba(124,58,237,.25);
+}
+
+/* =======================================
+   RESPONSIVE
+======================================= */
+
+@media(max-width:1200px){
+
+.hero{
+
+grid-template-columns:1fr;
+
+text-align:center;
+
+padding:150px 40px 80px;
+}
+
+.hero-left{
+
+display:flex;
+
+flex-direction:column;
+
+align-items:center;
+}
+
+.hero p{
+
+max-width:700px;
+}
+
+.hero-right{
+
+margin-top:60px;
+
+min-height:650px;
+}
+
+.hero-buttons{
+
+justify-content:center;
+}
+
+.floating-stat{
+
+display:none;
+}
+
+.hero-visual{
+
+width:620px;
+
+height:620px;
+}
+
+.hero-tilt-card{
+
+width:520px;
+
+height:520px;
+
+left:50px;
+
+top:50px;
+}
+
+.hero-image-wrap{
+
+height:350px;
+}
+
+}
+
+/* =======================================
+   MOBILE
+======================================= */
+
+@media(max-width:768px){
+
+.hero{
+
+padding:120px 20px 60px;
+
+gap:30px;
+}
+
+.hero h1{
+
+font-size:48px;
+}
+
+.hero p{
+
+font-size:18px;
+
+line-height:1.7;
+}
+
+.hero-buttons{
+
+flex-direction:column;
+
+width:100%;
+}
+
+.primary-btn,
+.secondary-btn{
+
+width:100%;
+
+justify-content:center;
+}
+
+.hero-right{
+
+min-height:500px;
+}
+
+.hero-visual{
+
+width:100%;
+
+height:450px;
+}
+
+.hero-tilt-card{
+
+width:100%;
+
+height:100%;
+
+left:0;
+
+top:0;
+
+transform:none;
+}
+
+.hero-image-wrap{
+
+height:260px;
+
+margin:0 16px;
+}
+
+.hero-tilt-header,
+
+.hero-tilt-footer{
+
+flex-direction:column;
+
+gap:12px;
+}
+
+.hero-chip{
+
+justify-content:center;
+}
+
+.hero-mini-stat{
+
+justify-content:center;
+}
+
+.hero-visual-ring{
+
+display:none;
+}
+
+}
+
+/* =======================================
+   EXTRA GLOW
+======================================= */
+
+.hero-right::before{
+
+content:"";
+
+position:absolute;
+
+width:420px;
+
+height:420px;
+
+background:
+
+radial-gradient(circle,
+
+rgba(124,58,237,.22),
+
+transparent 70%);
+
+filter:blur(70px);
+
+z-index:-1;
+}
