@@ -1,4 +1,5 @@
 import logo from "../../assets/logo.png";
+import { Link } from "react-router-dom";
 
 function Footer() {
   return (
@@ -23,10 +24,10 @@ function Footer() {
           <div>
             <h3 className="mb-5 text-lg font-semibold text-white">Company</h3>
             <ul className="space-y-3 text-sm text-slate-400">
-              <li><a className="transition hover:text-violet-300" href="#">About</a></li>
+              <li><Link className="transition hover:text-violet-300" to="/about">About</Link></li>
               <li><a className="transition hover:text-violet-300" href="#">Services</a></li>
-              <li><a className="transition hover:text-violet-300" href="#">Portfolio</a></li>
-              <li><a className="transition hover:text-violet-300" href="#">Contact</a></li>
+              <li><Link className="transition hover:text-violet-300" to="/projects">Portfolio</Link></li>
+              <li><Link className="transition hover:text-violet-300" to="/support">Contact</Link></li>
             </ul>
           </div>
 
@@ -34,7 +35,7 @@ function Footer() {
             <h3 className="mb-5 text-lg font-semibold text-white">Resources</h3>
             <ul className="space-y-3 text-sm text-slate-400">
               <li><a className="transition hover:text-violet-300" href="#">Blog</a></li>
-              <li><a className="transition hover:text-violet-300" href="#">FAQs</a></li>
+              <li><Link className="transition hover:text-violet-300" to="/support">FAQs</Link></li>
               <li><a className="transition hover:text-violet-300" href="#">Privacy Policy</a></li>
               <li><a className="transition hover:text-violet-300" href="#">Terms & Conditions</a></li>
             </ul>

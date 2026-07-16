@@ -1,8 +1,7 @@
-import { useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import {
   LogIn,
   UserPlus,
-  Code2,
 } from "lucide-react";
 
 import Navbar from "../../../components/Navbar/navBar";
@@ -10,8 +9,13 @@ import LoginForm from "./LoginPage";
 import RegisterForm from "./SignUp";
 
 export default function AuthPage() {
+  const location = useLocation();
+  const navigate = useNavigate();
+  const isLogin = location.pathname !== "/signup";
 
-  const [isLogin, setIsLogin] = useState(true);
+  const selectMode = (login) => {
+    navigate(login ? "/login" : "/signup");
+  };
 
   return (
     <div className="relative min-h-screen overflow-hidden bg-[#090D1C] text-white">
@@ -70,7 +74,7 @@ export default function AuthPage() {
           <div className="mt-10 flex rounded-2xl bg-[#171E34] p-1">
 
             <button
-              onClick={() => setIsLogin(true)}
+              onClick={() => selectMode(true)}
               className={`flex flex-1 items-center justify-center gap-2 rounded-xl py-4 transition
               ${
                 isLogin
@@ -86,7 +90,7 @@ export default function AuthPage() {
             </button>
 
             <button
-              onClick={() => setIsLogin(false)}
+              onClick={() => selectMode(false)}
               className={`flex flex-1 items-center justify-center gap-2 rounded-xl py-4 transition
               ${
                 !isLogin
