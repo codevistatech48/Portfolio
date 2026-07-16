@@ -1,11 +1,12 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 function AuthButton() {
   const token = localStorage.getItem("userToken");
+  const navigate = useNavigate();
 
   const handleLogout = () => {
     localStorage.removeItem("userToken");
-    window.location.reload();
+    navigate("/", { replace: true });
   };
 
   if (token) {

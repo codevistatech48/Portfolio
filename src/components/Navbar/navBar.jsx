@@ -1,8 +1,16 @@
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import AuthButton from "../../components/AuthButton";
 import logo from "../../assets/logo.png";
 
 function Navbar() {
+  const token = localStorage.getItem("userToken");
+  const navLinkClass = ({ isActive }) =>
+    `rounded-full px-4 py-2 text-sm font-medium transition ${
+      isActive
+        ? "bg-white/10 text-white"
+        : "text-slate-300 hover:bg-white/5 hover:text-white"
+    }`;
+
   return (
     <nav className="fixed left-0 top-0 z-50 w-full border-b border-white/5 bg-[#080b18]/90 backdrop-blur-xl">
       <div className="mx-auto flex h-[4.75rem] max-w-[1450px] items-center justify-between gap-4 px-6 sm:px-8 lg:px-10">
@@ -18,24 +26,21 @@ function Navbar() {
         </Link>
 
         <div className="hidden items-center gap-1 rounded-full border border-white/6 bg-white/3 p-1 lg:flex">
-          <Link to="/" className="rounded-full bg-white/10 px-4 py-2 text-sm font-medium text-white transition hover:bg-white/15">
+          <NavLink to="/" end className={navLinkClass}>
             Home
-          </Link>
-          {/* <Link to="/services" className="rounded-full px-4 py-2 text-sm font-medium text-slate-300 transition hover:bg-white/5 hover:text-white">
-            Categories
-          </Link> */}
-          <Link to="/projects" className="rounded-full px-4 py-2 text-sm font-medium text-slate-300 transition hover:bg-white/5 hover:text-white">
+          </NavLink>
+          <NavLink to="/projects" className={navLinkClass}>
             Projects
-          </Link>
-          <Link to="/srs" className="rounded-full px-4 py-2 text-sm font-medium text-slate-300 transition hover:bg-white/5 hover:text-white">
+          </NavLink>
+          {token && <NavLink to="/srs" className={navLinkClass}>
             SRS Request
-          </Link>
-          <Link to="/about" className="rounded-full px-4 py-2 text-sm font-medium text-slate-300 transition hover:bg-white/5 hover:text-white">
+          </NavLink>}
+          <NavLink to="/about" className={navLinkClass}>
             About
-          </Link>
-          <Link to="/support" className="rounded-full px-4 py-2 text-sm font-medium text-slate-300 transition hover:bg-white/5 hover:text-white">
+          </NavLink>
+          <NavLink to="/support" className={navLinkClass}>
             Support
-          </Link>
+          </NavLink>
         </div>
 
         <div className="flex items-center gap-3 sm:gap-4">
