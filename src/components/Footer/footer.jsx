@@ -1,7 +1,9 @@
 import logo from "../../assets/logo.png";
 import { Link } from "react-router-dom";
+import { useSiteSettings } from "../SiteSettingsProvider";
 
 function Footer() {
+  const siteSettings = useSiteSettings();
   return (
     <footer className="border-t border-white/5 bg-[#080b18] px-6 py-16 text-white sm:px-8 lg:px-10">
       <div className="mx-auto max-w-[1450px]">
@@ -9,10 +11,10 @@ function Footer() {
           <div>
             <div className="mb-5 flex items-center gap-3">
               <div className="flex h-12 w-12 items-center justify-center overflow-hidden rounded-2xl border border-white/10 bg-white/5">
-                <img src={logo} alt="CodeVista Logo" className="h-10 w-10 object-contain" />
+                <img src={siteSettings.logo || logo} alt={`${siteSettings.companyName || "CodeVista"} Logo`} className="h-10 w-10 object-contain" />
               </div>
               <h2 className="text-3xl font-bold tracking-tight text-white">
-                Code<span className="text-violet-400">Vista</span>
+                <span className="text-violet-400">{siteSettings.companyName || "CodeVista"}</span>
               </h2>
             </div>
 
@@ -44,9 +46,9 @@ function Footer() {
           <div>
             <h3 className="mb-5 text-lg font-semibold text-white">Contact</h3>
             <div className="space-y-3 text-sm leading-7 text-slate-400">
-              <p>📧 codevistatech48@gmail.com</p>
-              <p>📞 +91 8787041668</p>
-              <p>📍 Greater Noida, Uttar Pradesh, India</p>
+              <p>📧 {siteSettings.email || "codevistatech48@gmail.com"}</p>
+              <p>📞 {siteSettings.phone || "+91 8787041668"}</p>
+              <p>📍 {siteSettings.address || "Greater Noida, Uttar Pradesh, India"}</p>
             </div>
 
             <div className="mt-6 flex gap-3">

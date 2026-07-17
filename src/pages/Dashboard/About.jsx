@@ -1,7 +1,6 @@
 import { ArrowRight, CheckCircle2, Code2, Lightbulb, UsersRound } from "lucide-react";
 import { Link } from "react-router-dom";
 import Footer from "../../components/Footer/footer";
-import Navbar from "../../components/Navbar/navBar";
 
 const values = [
   { icon: Lightbulb, title: "Purposeful thinking", text: "We turn ambitious ideas into focused, useful digital experiences." },
@@ -14,7 +13,6 @@ const approach = ["Understand the people and problem", "Design a clear product d
 export default function About() {
   return (
     <main className="min-h-screen bg-[#080C1B] text-white">
-      <Navbar />
       <section className="relative overflow-hidden px-6 pb-24 pt-36 sm:px-8 lg:px-10">
         <div className="pointer-events-none absolute inset-0 opacity-20" style={{ backgroundImage: "linear-gradient(rgba(255,255,255,.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.05) 1px, transparent 1px)", backgroundSize: "64px 64px" }} />
         <div className="pointer-events-none absolute left-1/2 top-10 h-[30rem] w-[30rem] -translate-x-1/2 rounded-full bg-violet-600/15 blur-[140px]" />

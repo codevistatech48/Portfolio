@@ -6,6 +6,7 @@ function AuthButton() {
 
   const handleLogout = () => {
     localStorage.removeItem("userToken");
+    window.dispatchEvent(new Event("auth-changed"));
     navigate("/", { replace: true });
   };
 
