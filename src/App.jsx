@@ -30,6 +30,12 @@ function ProtectedRoute({ children }) {
   return token ? children : <Navigate to="/login" replace />;
 }
 
+function PublicRoute({ children }) {
+  const token = localStorage.getItem("userToken");
+
+  return token ? <Navigate to="/dashboard" replace /> : children;
+}
+
 function HomeRoute() {
   const token = localStorage.getItem("userToken");
 
@@ -69,10 +75,10 @@ function DashboardEntry() {
 function App() {
   return (
     <Routes>
-      <Route path="/login" element={<AuthPage />} />
-      <Route path="/signup" element={<AuthPage />} />
-      <Route path="/otp" element={<OtpVerification />} />
-      <Route path="/admin" element={<AdminLayout />}>
+      <Route path="/login" element={<PublicRoute><AuthPage /></PublicRoute>} />
+      <Route path="/signup" element={<PublicRoute><AuthPage /></PublicRoute>} />
+      <Route path="/otp" element={<PublicRoute><OtpVerification /></PublicRoute>} />
+      <Route path="/admin" element={<ProtectedRoute><AdminLayout /></ProtectedRoute>}>
         <Route index element={<AdminDashboard />} />
         <Route path="users" element={<AdminUsers />} />
         <Route path="srs" element={<AdminSrs />} />
@@ -89,7 +95,7 @@ function App() {
       </Route>
       <Route element={<MainLayout />}>
         <Route path="/" element={<HomeRoute />} />
-        <Route path="/projects" element={<Projects />} />
+        <Route path="/projects" element={<PublicRoute><Projects /></PublicRoute>} />
         <Route path="/about" element={<About />} />
         <Route path="/support" element={<Support />} />
         <Route
