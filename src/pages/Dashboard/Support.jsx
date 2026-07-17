@@ -1,7 +1,7 @@
 import { ChevronDown, CircleHelp, Mail, MessageSquareText, Phone } from "lucide-react";
 import { useState } from "react";
 import Footer from "../../components/Footer/footer";
-import { useSiteSettings } from "../../components/SiteSettingsProvider";
+
 
 const faqs = [
   ["How can I start a project with CodeVista?", "Send us a message with a short outline of your idea. Our team will get back to you to understand the scope and discuss the next steps."],

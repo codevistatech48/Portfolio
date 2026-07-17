@@ -25,11 +25,11 @@ function Navbar() {
       <div className="mx-auto flex h-[4.75rem] max-w-[1450px] items-center justify-between gap-4 px-6 sm:px-8 lg:px-10">
         <Link to="/" className="flex items-center gap-3">
           <div className="flex h-11 w-11 items-center justify-center overflow-hidden rounded-2xl border border-white/10 bg-white/5 shadow-[0_10px_30px_rgba(124,58,237,0.22)]">
-            <img src={siteSettings.logo || logo} alt={`${siteSettings.companyName || "CodeVista"} Logo`} className="h-9 w-9 object-contain" />
+            <img src={logo} alt={`${ "CodeVista"} Logo`} className="h-9 w-9 object-contain" />
           </div>
           <div className="leading-none">
             <h2 className="text-[1.7rem] font-bold tracking-tight text-white">
-              <span className="text-violet-400">{siteSettings.companyName || "CodeVista"}</span>
+              <span className="text-violet-400">{"CodeVista"}</span>
             </h2>
           </div>
         </Link>
