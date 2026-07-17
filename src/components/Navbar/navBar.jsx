@@ -3,12 +3,10 @@ import AuthButton from "../../components/AuthButton";
 import ProfileMenu from "../../components/ProfileMenu";
 import NotificationMenu from "../../components/NotificationMenu";
 import logo from "../../assets/logo.png";
-import { useSiteSettings } from "../SiteSettingsProvider";
 import { useEffect, useState } from "react";
 
 function Navbar() {
   const [token, setToken] = useState(() => localStorage.getItem("userToken"));
-  const siteSettings = useSiteSettings();
   useEffect(() => {
     const syncAuth = () => setToken(localStorage.getItem("userToken"));
     window.addEventListener("auth-changed", syncAuth);

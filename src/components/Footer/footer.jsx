@@ -1,9 +1,7 @@
 import logo from "../../assets/logo.png";
 import { Link } from "react-router-dom";
-import { useSiteSettings } from "../SiteSettingsProvider";
 
 function Footer() {
-  const siteSettings = useSiteSettings();
   return (
     <footer className="border-t border-white/5 bg-[#080b18] px-6 py-16 text-white sm:px-8 lg:px-10">
       <div className="mx-auto max-w-[1450px]">
