@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { ExternalLink, Filter, X } from "lucide-react";
-import Navbar from "../../components/Navbar/navBar";
-import analyticsPreview from "../../assets/analytics-dashboard-preview.png";
+
 import landingPreview from "../../assets/proctify.png";
-import aiIntPreview from "../../assets/ai.webp";
-import BusTrack from "../../assets/bus.webp";
+import aiIntPreview from "../../assets/interview.png";
+import BusTrack from "../../assets/RouteMaster.png";
 import AiCarrier from "../../assets/aiCarrieguide.png"
+import nagar from "../../assets/nagarvanni.png"
 
 const projects = [
   {
@@ -17,8 +17,17 @@ const projects = [
     image: aiIntPreview,
     demoUrl: "https://ai-interview-simulator-pi.vercel.app/",
   },
+    {
+    name: "Proctify",
+    category: "Education",
+    summary: "AI-based online exam proctoring application.",
+    description: "An intelligent exam monitoring platform that uses AI to help maintain exam integrity by detecting suspicious activity during online assessments.",
+    stack: ["Next JS", "Computer Vision", "Python","MOngoDB", "Tailwind CSS" ],
+    image: landingPreview,
+    demoUrl: "https://proctify-five.vercel.app/",
+  },
   {
-    name: "Bus Live Tracking System",
+    name: "RouteMaster",
     category: "Tracking",
     summary: "Real-time bus locations, routes, and arrival updates.",
     description: "A live public-transport tracking system that lets commuters monitor buses in real time, view routes, and make better travel decisions.",
@@ -35,23 +44,15 @@ const projects = [
     image: AiCarrier,
     demoUrl: "https://example.com",
   },
+
   {
-    name: "Proctify",
-    category: "Education",
-    summary: "AI-based online exam proctoring application.",
-    description: "An intelligent exam monitoring platform that uses AI to help maintain exam integrity by detecting suspicious activity during online assessments.",
-    stack: ["Next JS", "Computer Vision", "Python","MOngoDB", "Tailwind CSS" ],
-    image: landingPreview,
-    demoUrl: "https://proctify-five.vercel.app/",
-  },
-  {
-    name: "Nagarvani",
+    name: "Nagarvaani",
     category: "Civic Tech",
     summary: "AI-powered civic issue reporting for safer communities.",
     description: "A civic complaint platform where residents can report damaged roads, broken poles, and other public issues. AI helps recognise the problem and routes the complaint for action.",
     stack: ["React", "AI Vision","Flask", "Tailwind CSS", "MongoDB"],
-    image: analyticsPreview,
-    demoUrl: "https://example.com",
+    image: nagar,
+    demoUrl: "https://nagarvaani-web.onrender.com",
   },
 ];
 
@@ -64,7 +65,6 @@ export default function Projects() {
 
   return (
     <main className="min-h-screen bg-[#080C1B] text-white">
-      <Navbar />
       <section className="relative overflow-hidden px-6 pb-24 pt-36 sm:px-8 lg:px-10">
         <div className="pointer-events-none absolute inset-0 opacity-20" style={{ backgroundImage: "linear-gradient(rgba(255,255,255,.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.05) 1px, transparent 1px)", backgroundSize: "64px 64px" }} />
         <div className="pointer-events-none absolute left-1/2 top-24 h-96 w-96 -translate-x-1/2 rounded-full bg-violet-600/15 blur-[130px]" />

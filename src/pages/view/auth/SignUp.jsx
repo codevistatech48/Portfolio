@@ -9,20 +9,7 @@ import {
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import API_URL from "../../../Config/api";
-
-function GitHubIcon({ size = 20 }) {
-  return (
-    <svg
-      aria-hidden="true"
-      fill="currentColor"
-      height={size}
-      width={size}
-      viewBox="0 0 24 24"
-    >
-      <path d="M12 2C6.477 2 2 6.59 2 12.253c0 4.53 2.865 8.37 6.839 9.727.5.096.682-.222.682-.494 0-.244-.009-.89-.013-1.747-2.782.619-3.369-1.38-3.369-1.38-.455-1.184-1.11-1.5-1.11-1.5-.908-.638.069-.625.069-.625 1.004.072 1.532 1.057 1.532 1.057.892 1.57 2.341 1.116 2.91.853.091-.665.349-1.117.635-1.374-2.221-.259-4.556-1.139-4.556-5.068 0-1.12.39-2.036 1.029-2.754-.103-.26-.446-1.306.098-2.722 0 0 .84-.276 2.75 1.052A9.347 9.347 0 0 1 12 6.884a9.35 9.35 0 0 1 2.504.347c1.909-1.328 2.748-1.052 2.748-1.052.545 1.416.202 2.462.099 2.722.64.718 1.028 1.634 1.028 2.754 0 3.939-2.339 4.806-4.567 5.06.359.32.678.95.678 1.915 0 1.383-.012 2.498-.012 2.838 0 .275.18.595.688.493C19.138 20.619 22 16.781 22 12.253 22 6.59 17.523 2 12 2Z" />
-    </svg>
-  );
-}
+import SocialLoginButtons from "./SocialLoginButtons";
 
 export default function RegisterForm() {
   const navigate = useNavigate();
@@ -38,6 +25,12 @@ export default function RegisterForm() {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+
+  const handleSocialSuccess = (token) => {
+    localStorage.setItem("userToken", token);
+    window.dispatchEvent(new Event("auth-changed"));
+    navigate("/dashboard", { replace: true });
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -84,7 +77,6 @@ export default function RegisterForm() {
     navigate("/otp", { state: { email: formData.email.trim() } });
 
   } catch (err) {
-    console.error(err);
     setError(err.message || "Something went wrong");
   } finally {
     setLoading(false);
@@ -98,23 +90,18 @@ export default function RegisterForm() {
     >
       {/* Social Login */}
 
-      <div className="grid grid-cols-2 gap-4">
-        <button
-          type="button"
-          className="flex h-14 items-center justify-center gap-3 rounded-xl border border-white/10 transition hover:border-violet-500"
-        >
-          <div className="h-4 w-4 rounded-full bg-red-500"></div>
-          Google
-        </button>
-
-        <button
-          type="button"
-          className="flex h-14 items-center justify-center gap-3 rounded-xl border border-white/10 transition hover:border-violet-500"
-        >
-          <GitHubIcon />
-          GitHub
-        </button>
-      </div>
+      <SocialLoginButtons
+        loading={loading}
+        onError={(message) => {
+          setLoading(false);
+          setError(message);
+        }}
+        onStart={() => {
+          setError("");
+          setLoading(true);
+        }}
+        onSuccess={handleSocialSuccess}
+      />
 
       {/* Divider */}
 

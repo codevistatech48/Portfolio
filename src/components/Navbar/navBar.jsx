@@ -1,9 +1,20 @@
 import { Link, NavLink } from "react-router-dom";
 import AuthButton from "../../components/AuthButton";
+import ProfileMenu from "../../components/ProfileMenu";
+import NotificationMenu from "../../components/NotificationMenu";
 import logo from "../../assets/logo.png";
+import { useSiteSettings } from "../SiteSettingsProvider";
+import { useEffect, useState } from "react";
 
 function Navbar() {
-  const token = localStorage.getItem("userToken");
+  const [token, setToken] = useState(() => localStorage.getItem("userToken"));
+  const siteSettings = useSiteSettings();
+  useEffect(() => {
+    const syncAuth = () => setToken(localStorage.getItem("userToken"));
+    window.addEventListener("auth-changed", syncAuth);
+    window.addEventListener("storage", syncAuth);
+    return () => { window.removeEventListener("auth-changed", syncAuth); window.removeEventListener("storage", syncAuth); };
+  }, []);
   const navLinkClass = ({ isActive }) =>
     `rounded-full px-4 py-2 text-sm font-medium transition ${
       isActive
@@ -16,11 +27,11 @@ function Navbar() {
       <div className="mx-auto flex h-[4.75rem] max-w-[1450px] items-center justify-between gap-4 px-6 sm:px-8 lg:px-10">
         <Link to="/" className="flex items-center gap-3">
           <div className="flex h-11 w-11 items-center justify-center overflow-hidden rounded-2xl border border-white/10 bg-white/5 shadow-[0_10px_30px_rgba(124,58,237,0.22)]">
-            <img src={logo} alt="CodeVista Logo" className="h-9 w-9 object-contain" />
+            <img src={siteSettings.logo || logo} alt={`${siteSettings.companyName || "CodeVista"} Logo`} className="h-9 w-9 object-contain" />
           </div>
           <div className="leading-none">
             <h2 className="text-[1.7rem] font-bold tracking-tight text-white">
-              Code<span className="text-violet-400">Vista</span>
+              <span className="text-violet-400">{siteSettings.companyName || "CodeVista"}</span>
             </h2>
           </div>
         </Link>
@@ -29,9 +40,9 @@ function Navbar() {
           <NavLink to="/" end className={navLinkClass}>
             Home
           </NavLink>
-          <NavLink to="/projects" className={navLinkClass}>
+          {!token &&<NavLink to="/projects" className={navLinkClass}>
             Projects
-          </NavLink>
+          </NavLink>}
           {token && <NavLink to="/srs" className={navLinkClass}>
             SRS Request
           </NavLink>}
@@ -44,10 +55,12 @@ function Navbar() {
         </div>
 
         <div className="flex items-center gap-3 sm:gap-4">
-          <AuthButton />
-          <button className="hidden rounded-2xl bg-gradient-to-r from-violet-600 to-fuchsia-600 px-5 py-3 text-sm font-semibold text-white shadow-[0_12px_30px_rgba(124,58,237,0.30)] transition hover:-translate-y-0.5 hover:shadow-[0_18px_40px_rgba(124,58,237,0.40)] sm:inline-flex">
-            Get a Quote
-          </button>
+          {token ? (
+            <>
+              <NotificationMenu />
+              <ProfileMenu />
+            </>
+          ) : <AuthButton />}
         </div>
       </div>
     </nav>

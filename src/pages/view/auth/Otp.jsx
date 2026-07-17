@@ -52,6 +52,7 @@ export default function OtpVerification() {
       if (!response.ok) throw new Error(data.message || "Verification failed");
       if (!data.token) throw new Error("Verification succeeded but no access token was returned");
       localStorage.setItem("userToken", data.token);
+      window.dispatchEvent(new Event("auth-changed"));
       sessionStorage.removeItem("pendingVerificationEmail");
       navigate("/dashboard", { replace: true });
     } catch (err) {
