@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { BookOpen, CheckCircle2, Clock, Code2, Database, FileText, Layers3, Lightbulb, Plug, Send, Shield, Target, User, UsersRound } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import api from "../../Config/api";
+import { useToast } from "../../components/ToastProvider";
 const benefits = [
   "Executive summary and project scope",
   "User stories and use cases",
@@ -40,6 +41,7 @@ function Field({ label, name, value, onChange, required, placeholder, type = "te
 
 export function SrsRequestForm() {
   const navigate = useNavigate();
+  const { showError } = useToast();
   const [form, setForm] = useState(initialForm);
 
   const updateForm = (event) => {
@@ -73,7 +75,7 @@ export function SrsRequestForm() {
 
     navigate("/srs/status", { replace: true });
   } catch (error) {
-    alert(error.message);
+    showError(error.message || "Failed to submit request");
   }
 };
 
@@ -125,7 +127,7 @@ export default function SrsRequest() {
           const data = await response.json();
           const request = data.request || data.srsRequest || data.data || data;
           const status = String(request?.status || "").toLowerCase();
-          setHasExistingRequest(Boolean(request?.id || request?._id || status));
+          setHasExistingRequest(status === "pending");
         }
       } catch {
         // If the status endpoint is unavailable, allow the user to submit a request.
