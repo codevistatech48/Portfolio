@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import API_URL from "../../../Config/api";
 import SocialLoginButtons from "./SocialLoginButtons";
+import { toast } from "react-toastify";
 
 export default function LoginForm() {
   const navigate = useNavigate();
@@ -61,10 +62,12 @@ const handleSocialSuccess = (token) => {
 
       localStorage.setItem("userToken", data.token);
       window.dispatchEvent(new Event("auth-changed"));
+      toast.success("Welcome back! You are now signed in.");
       navigate("/dashboard", { replace: true });
 
     } catch (err) {
       setError(err.message);
+      toast.error(err.message || "Login failed");
     }
   };
 

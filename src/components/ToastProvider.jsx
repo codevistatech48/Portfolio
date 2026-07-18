@@ -1,6 +1,6 @@
 /* eslint-disable react-refresh/only-export-components */
 import { createContext, useCallback, useContext, useState } from "react";
-import { AlertCircle, X } from "lucide-react";
+import { AlertCircle, CheckCircle2, X } from "lucide-react";
 
 const ToastContext = createContext(null);
 
@@ -13,19 +13,42 @@ export function ToastProvider({ children }) {
 
   const showError = useCallback((message) => {
     const id = crypto.randomUUID();
-    setToasts((current) => [...current, { id, message }]);
+    setToasts((current) => [...current, { id, message, type: "error" }]);
     window.setTimeout(() => dismissToast(id), 5000);
   }, [dismissToast]);
 
+  const showSuccess = useCallback((message) => {
+    const id = crypto.randomUUID();
+    setToasts((current) => [...current, { id, message, type: "success" }]);
+    window.setTimeout(() => dismissToast(id), 4000);
+  }, [dismissToast]);
+
   return (
-    <ToastContext.Provider value={{ showError }}>
+    <ToastContext.Provider value={{ showError, showSuccess }}>
       {children}
       <div className="pointer-events-none fixed right-4 top-4 z-50 flex w-[min(24rem,calc(100vw-2rem))] flex-col gap-3" aria-live="assertive">
         {toasts.map((toast) => (
-          <div key={toast.id} role="alert" className="pointer-events-auto flex items-start gap-3 rounded-lg border border-red-400/30 bg-[#20131a] p-4 text-sm text-red-100 shadow-xl">
-            <AlertCircle className="mt-0.5 shrink-0 text-red-300" size={19} aria-hidden="true" />
+          <div
+            key={toast.id}
+            role="alert"
+            className={`pointer-events-auto flex items-start gap-3 rounded-lg border p-4 text-sm shadow-xl ${
+              toast.type === "success"
+                ? "border-emerald-400/30 bg-[#13201a] text-emerald-100"
+                : "border-red-400/30 bg-[#20131a] text-red-100"
+            }`}
+          >
+            {toast.type === "success" ? (
+              <CheckCircle2 className="mt-0.5 shrink-0 text-emerald-300" size={19} aria-hidden="true" />
+            ) : (
+              <AlertCircle className="mt-0.5 shrink-0 text-red-300" size={19} aria-hidden="true" />
+            )}
             <p className="flex-1 leading-5">{toast.message}</p>
-            <button type="button" onClick={() => dismissToast(toast.id)} className="-mr-1 -mt-1 inline-flex h-8 w-8 shrink-0 items-center justify-center rounded text-red-100 transition hover:bg-white/10" aria-label="Dismiss error">
+            <button
+              type="button"
+              onClick={() => dismissToast(toast.id)}
+              className="-mr-1 -mt-1 inline-flex h-8 w-8 shrink-0 items-center justify-center rounded transition hover:bg-white/10"
+              aria-label="Dismiss"
+            >
               <X size={18} aria-hidden="true" />
             </button>
           </div>

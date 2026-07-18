@@ -4,12 +4,15 @@ import Landing from "./pages/Dashboard/Landing";
 import Dashboard from "./pages/Dashboard/Dashboard";
 import Profile from "./pages/Dashboard/Profile";
 import Projects from "./pages/Dashboard/Projects";
+import MyProjects from "./pages/Dashboard/MyProjects";
+import ProjectDetails from "./pages/Dashboard/ProjectDetails";
 import About from "./pages/Dashboard/About";
 import Support from "./pages/Dashboard/Support";
 import SrsRequest from "./pages/Dashboard/SrsRequest";
 import SrsSuccess from "./pages/Dashboard/SrsSuccess";
 import SrsStatus from "./pages/Dashboard/SrsStatus";
 import { SrsRequestForm } from "./pages/Dashboard/SrsRequest";
+import SrsRevisionRequest from "./pages/Dashboard/SrsRevisionRequest";
 import AdminLayout from "./pages/Admin/AdminLayout";
 import AdminDashboard from "./pages/Admin/AdminDashboard";
 import AdminSettings from "./pages/Admin/AdminSettings";
@@ -18,11 +21,13 @@ import AdminActivity from "./pages/Admin/AdminActivity";
 import AdminSrs from "./pages/Admin/AdminSrs";
 import AdminProjects from "./pages/Admin/AdminProjects";
 import AdminVisualResource from "./pages/Admin/AdminVisualResource";
+import RevisionReview from "./pages/view/auth/revisions/RevisionReview";
 import AdminUsers from "./pages/Admin/AdminUsers";
 import API_URL from "./Config/api";
 import AuthPage from "./pages/view/auth/AuthPage";
 import ForgotPassword from "./pages/view/auth/ForgotPassword";
 import ResetPassword from "./pages/view/auth/ResetPassword";
+import RevisionRequests from "./pages/Admin/RevisionRequests";
 import OtpVerification from "./pages/view/auth/Otp";
 import MainLayout from "./components/MainLayout";
 
@@ -74,6 +79,11 @@ function DashboardEntry() {
   return role === "admin" ? <Navigate to="/admin" replace /> : <Dashboard />;
 }
 
+function ProjectsRoute() {
+  const token = localStorage.getItem("userToken");
+  return token ? <MyProjects /> : <Projects />;
+}
+
 function App() {
   return (
     <Routes>
@@ -90,6 +100,11 @@ function App() {
         <Route path="payments" element={<AdminVisualResource title="Payments" endpoint="/api/admin/payments" kind="payments" />} />
         <Route path="invoices" element={<AdminVisualResource title="Invoices" endpoint="/api/admin/invoices" kind="invoices" />} />
         <Route path="revenue" element={<AdminVisualResource title="Revenue" endpoint="/api/admin/revenue" kind="revenue" />} />
+        <Route path="revisions" element={<RevisionRequests />} />
+        <Route
+          path="revisions/:revisionId"
+          element={<RevisionReview />}
+        />
         <Route path="portfolio" element={<AdminVisualResource title="Portfolio" endpoint="/api/admin/portfolio" kind="portfolio" />} />
         <Route path="blogs" element={<AdminVisualResource title="Blogs" endpoint="/api/admin/blogs" kind="blogs" />} />
         <Route path="analytics" element={<AdminAnalytics />} />
@@ -99,7 +114,7 @@ function App() {
       </Route>
       <Route element={<MainLayout />}>
         <Route path="/" element={<HomeRoute />} />
-        <Route path="/projects" element={<PublicRoute><Projects /></PublicRoute>} />
+        <Route path="/projects" element={<ProjectsRoute />} />
         <Route path="/about" element={<About />} />
         <Route path="/support" element={<Support />} />
         <Route
@@ -135,6 +150,14 @@ function App() {
           }
         />
         <Route
+          path="/projects/:projectId/revision"
+          element={
+            <ProtectedRoute>
+              <SrsRevisionRequest />
+            </ProtectedRoute>
+          }
+        />
+        <Route
           path="/dashboard"
           element={
             <ProtectedRoute>
@@ -147,6 +170,22 @@ function App() {
           element={
             <ProtectedRoute>
               <Profile />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/my-projects"
+          element={
+            <ProtectedRoute>
+              <MyProjects />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/projects/:id"
+          element={
+            <ProtectedRoute>
+              <ProjectDetails />
             </ProtectedRoute>
           }
         />

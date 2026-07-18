@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { BookOpen, CheckCircle2, Clock, Code2, Database, FileText, Layers3, Lightbulb, Plug, Send, Shield, Target, User, UsersRound } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import api from "../../Config/api";
-import { useToast } from "../../components/ToastProvider";
+import { toast } from "react-toastify";
 const benefits = [
   "Executive summary and project scope",
   "User stories and use cases",
@@ -41,43 +41,48 @@ function Field({ label, name, value, onChange, required, placeholder, type = "te
 
 export function SrsRequestForm() {
   const navigate = useNavigate();
-  const { showError } = useToast();
   const [form, setForm] = useState(initialForm);
+  const [submitting, setSubmitting] = useState(false);
 
   const updateForm = (event) => {
     const { name, value } = event.target;
     setForm((current) => ({ ...current, [name]: value }));
   };
 
- const handleSubmit = async (event) => {
-  event.preventDefault();
+  const handleSubmit = async (event) => {
+   event.preventDefault();
+   if (submitting) return;
 
-  try {
-    const token = localStorage.getItem("userToken");
+   try {
+     setSubmitting(true);
+     const token = localStorage.getItem("userToken");
 
-    const response = await fetch(
-      `${api}/api/auth/srs-requests`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(form),
-      }
-    );
+     const response = await fetch(
+       `${api}/api/auth/srs-requests`,
+       {
+         method: "POST",
+         headers: {
+           "Content-Type": "application/json",
+           Authorization: `Bearer ${token}`,
+         },
+         body: JSON.stringify(form),
+       }
+     );
 
-    const data = await response.json();
+     const data = await response.json();
 
-    if (!response.ok) {
-      throw new Error(data.message || "Failed to submit request");
-    }
+     if (!response.ok) {
+       throw new Error(data.message || "Failed to submit request");
+     }
 
-    navigate("/srs/status", { replace: true });
-  } catch (error) {
-    showError(error.message || "Failed to submit request");
-  }
-};
+     toast.success("SRS request submitted successfully!");
+     navigate("/srs/status", { replace: true });
+   } catch (error) {
+     toast.error(error.message || "Failed to submit request");
+   } finally {
+     setSubmitting(false);
+   }
+ };
 
   return (
     <main className="min-h-screen bg-[#090D1C] text-white">
@@ -97,7 +102,7 @@ export function SrsRequestForm() {
 
               <section className="rounded-3xl border border-white/10 bg-[#151B30]/90 p-7 backdrop-blur-xl sm:p-8"><SectionTitle icon={Code2} title="Product requirements" description="The details that shape features and technical decisions." /><label className="block text-sm font-medium text-slate-200">Key features and workflows<textarea name="features" value={form.features} onChange={updateForm} required rows="6" placeholder="List the main features, user journeys, and actions the system needs to support." className="mt-2 w-full resize-y rounded-xl border border-white/10 bg-[#090D1C] px-4 py-3 text-white outline-none placeholder:text-slate-500 focus:border-violet-400" /></label><div className="mt-6 grid gap-6 sm:grid-cols-2"><label className="block text-sm font-medium text-slate-200">User roles and permissions<textarea name="userRoles" value={form.userRoles} onChange={updateForm} rows="4" placeholder="For example: admin, manager, customer, support agent." className="mt-2 w-full resize-y rounded-xl border border-white/10 bg-[#090D1C] px-4 py-3 text-white outline-none placeholder:text-slate-500 focus:border-violet-400" /></label><label className="block text-sm font-medium text-slate-200">Third-party integrations<textarea name="integrations" value={form.integrations} onChange={updateForm} rows="4" placeholder="For example: Stripe, Google Maps, WhatsApp, ERP, CRM, analytics." className="mt-2 w-full resize-y rounded-xl border border-white/10 bg-[#090D1C] px-4 py-3 text-white outline-none placeholder:text-slate-500 focus:border-violet-400" /></label></div><label className="mt-6 block text-sm font-medium text-slate-200">Technical, security, or compliance requirements<textarea name="technology" value={form.technology} onChange={updateForm} rows="4" placeholder="Mention existing technologies, hosting preferences, performance, privacy, or compliance needs." className="mt-2 w-full resize-y rounded-xl border border-white/10 bg-[#090D1C] px-4 py-3 text-white outline-none placeholder:text-slate-500 focus:border-violet-400" /></label></section>
 
-              <section className="rounded-3xl border border-white/10 bg-[#151B30]/90 p-7 backdrop-blur-xl sm:p-8"><SectionTitle icon={Target} title="Delivery expectations" description="Help us plan a practical SRS and project roadmap." /><div className="grid gap-6 sm:grid-cols-2"><Field label="Target timeline" name="timeline" value={form.timeline} onChange={updateForm} placeholder="For example: launch in 3 months" /><Field label="Estimated budget range" name="budget" value={form.budget} onChange={updateForm} placeholder="For example: ₹5–10 lakh" /></div><label className="mt-6 block text-sm font-medium text-slate-200">Additional notes, references, or links<textarea name="notes" value={form.notes} onChange={updateForm} rows="4" placeholder="Share competitors, documents, design links, or anything else that will help." className="mt-2 w-full resize-y rounded-xl border border-white/10 bg-[#090D1C] px-4 py-3 text-white outline-none placeholder:text-slate-500 focus:border-violet-400" /></label><label className="mt-6 flex items-start gap-3 text-sm leading-6 text-slate-400"><input type="checkbox" required className="mt-1 h-4 w-4 accent-violet-500" />I confirm that the information is accurate and I agree to be contacted about this SRS request.</label><button type="submit" className="mt-8 inline-flex h-14 items-center gap-3 rounded-xl bg-gradient-to-r from-indigo-500 to-fuchsia-600 px-6 font-semibold shadow-[0_12px_30px_rgba(124,58,237,.30)] transition hover:-translate-y-0.5"><Send size={19} />Submit SRS request</button></section>
+              <section className="rounded-3xl border border-white/10 bg-[#151B30]/90 p-7 backdrop-blur-xl sm:p-8"><SectionTitle icon={Target} title="Delivery expectations" description="Help us plan a practical SRS and project roadmap." /><div className="grid gap-6 sm:grid-cols-2"><Field label="Target timeline" name="timeline" value={form.timeline} onChange={updateForm} placeholder="For example: launch in 3 months" /><Field label="Estimated budget range" name="budget" value={form.budget} onChange={updateForm} placeholder="For example: ₹5–10 lakh" /></div><label className="mt-6 block text-sm font-medium text-slate-200">Additional notes, references, or links<textarea name="notes" value={form.notes} onChange={updateForm} rows="4" placeholder="Share competitors, documents, design links, or anything else that will help." className="mt-2 w-full resize-y rounded-xl border border-white/10 bg-[#090D1C] px-4 py-3 text-white outline-none placeholder:text-slate-500 focus:border-violet-400" /></label><label className="mt-6 flex items-start gap-3 text-sm leading-6 text-slate-400"><input type="checkbox" required className="mt-1 h-4 w-4 accent-violet-500" />I confirm that the information is accurate and I agree to be contacted about this SRS request.</label><button type="submit" disabled={submitting} className="mt-8 inline-flex h-14 items-center gap-3 rounded-xl bg-gradient-to-r from-indigo-500 to-fuchsia-600 px-6 font-semibold shadow-[0_12px_30px_rgba(124,58,237,.30)] transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-70">{submitting ? "Submitting..." : <><Send size={19} />Submit SRS request</>}</button></section>
             </form>
 
             <aside className="h-fit rounded-3xl border border-white/10 bg-[#151B30]/90 p-7 backdrop-blur-xl lg:sticky lg:top-28"><h2 className="text-2xl font-bold">What you get</h2><ul className="mt-7 space-y-5">{benefits.map((benefit) => <li key={benefit} className="flex gap-3 text-slate-300"><CheckCircle2 className="mt-0.5 shrink-0 text-emerald-400" size={20} />{benefit}</li>)}</ul><div className="mt-8 border-t border-white/10 pt-7"><p className="flex items-center gap-2 font-semibold text-violet-200"><Lightbulb size={19} />A complete technical foundation</p><p className="mt-3 text-sm leading-6 text-slate-400">Your SRS gives stakeholders, designers, and developers one aligned plan before implementation begins.</p></div><div className="mt-7 grid grid-cols-3 gap-3 text-center text-violet-300"><span className="rounded-xl bg-violet-500/10 p-3"><UsersRound className="mx-auto" size={20} /></span><span className="rounded-xl bg-violet-500/10 p-3"><Database className="mx-auto" size={20} /></span><span className="rounded-xl bg-violet-500/10 p-3"><Plug className="mx-auto" size={20} /></span></div></aside>

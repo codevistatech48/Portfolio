@@ -10,6 +10,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import API_URL from "../../../Config/api";
 import SocialLoginButtons from "./SocialLoginButtons";
+import { toast } from "react-toastify";
 
 export default function RegisterForm() {
   const navigate = useNavigate();
@@ -72,12 +73,14 @@ export default function RegisterForm() {
       throw new Error(data.message || "Registration failed");
     }
 
+    toast.success("Account created! Please verify your email.");
     // Keep only the data needed to complete email verification.
     sessionStorage.setItem("pendingVerificationEmail", formData.email.trim());
     navigate("/otp", { state: { email: formData.email.trim() } });
 
   } catch (err) {
     setError(err.message || "Something went wrong");
+    toast.error(err.message || "Registration failed");
   } finally {
     setLoading(false);
   }
