@@ -21,6 +21,8 @@ import AdminVisualResource from "./pages/Admin/AdminVisualResource";
 import AdminUsers from "./pages/Admin/AdminUsers";
 import API_URL from "./Config/api";
 import AuthPage from "./pages/view/auth/AuthPage";
+import ForgotPassword from "./pages/view/auth/ForgotPassword";
+import ResetPassword from "./pages/view/auth/ResetPassword";
 import OtpVerification from "./pages/view/auth/Otp";
 import MainLayout from "./components/MainLayout";
 
@@ -77,6 +79,8 @@ function App() {
     <Routes>
       <Route path="/login" element={<PublicRoute><AuthPage /></PublicRoute>} />
       <Route path="/signup" element={<PublicRoute><AuthPage /></PublicRoute>} />
+      <Route path="/forgot-password" element={<PublicRoute><ForgotPassword /></PublicRoute>} />
+      <Route path="/reset-password" element={<PublicRoute><ResetPassword /></PublicRoute>} />
       <Route path="/otp" element={<PublicRoute><OtpVerification /></PublicRoute>} />
       <Route path="/admin" element={<ProtectedRoute><AdminLayout /></ProtectedRoute>}>
         <Route index element={<AdminDashboard />} />

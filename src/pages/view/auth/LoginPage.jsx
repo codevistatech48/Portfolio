@@ -1,6 +1,6 @@
 import { ArrowRight, Mail, Lock, Eye, Shield } from "lucide-react";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import API_URL from "../../../Config/api";
 import SocialLoginButtons from "./SocialLoginButtons";
 
@@ -127,12 +127,12 @@ const handleSocialSuccess = (token) => {
           Password
         </label>
 
-        <button
-          type="button"
+        <Link
+          to="/forgot-password"
           className="text-sm text-violet-400 hover:text-violet-300"
         >
           Forgot password?
-        </button>
+        </Link>
       </div>
 
       <div className="relative mt-3">
