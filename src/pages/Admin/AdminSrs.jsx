@@ -11,7 +11,12 @@ function DetailRow({ name, value }) { return <div className="rounded-2xl border 
 
 export default function AdminSrs() {
   const [requests, setRequests] = useState([]); const [loading, setLoading] = useState(true); const [error, setError] = useState(""); const [open, setOpen] = useState(null); const [selected, setSelected] = useState(null); const [busy, setBusy] = useState("");
-  const load = useCallback(async () => { try { setLoading(true); const response = await fetch(`${API_URL}/api/admin/srs?page=1&limit=50`, { headers: { Authorization: `Bearer ${localStorage.getItem("userToken")}` }, credentials: "include" }); const data = await response.json(); if (!response.ok) throw new Error(data.message || "Unable to load SRS requests."); setRequests(getItems(data)); setError(""); } catch (requestError) { setError(requestError.message); } finally { setLoading(false); } }, []);
+  const load = useCallback(async () => { try { setLoading(true); const response = await fetch(`${API_URL}/api/admin/srs?page=1&limit=50`, 
+    
+    { headers: { Authorization: `Bearer ${localStorage.getItem("userToken")}` }, credentials: "include" }); const data = await response.json();
+console.log("SRS API Response:", data);
+
+setRequests(getItems(data));if (!response.ok) throw new Error(data.message || "Unable to load SRS requests."); setRequests(getItems(data)); setError(""); } catch (requestError) { setError(requestError.message); } finally { setLoading(false); } }, []);
   useEffect(() => { // eslint-disable-next-line react-hooks/set-state-in-effect
     load(); const timer = window.setInterval(load, 30000); return () => window.clearInterval(timer);
   }, [load]);

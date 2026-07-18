@@ -2,6 +2,7 @@ import { ArrowLeft, Mail, Shield, Send } from "lucide-react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import API_URL from "../../../Config/api";
+import { toast } from "react-toastify";
 
 export default function ForgotPassword() {
   const [email, setEmail] = useState("");
@@ -30,12 +31,15 @@ export default function ForgotPassword() {
         throw new Error(data.message || "Failed to send reset email");
       }
 
-      setSuccess(
+      const message =
         data.message ||
-          "If an account with that email exists, a password reset link has been sent."
-      );
+        "If an account with that email exists, a password reset link has been sent.";
+      setSuccess(message);
+      toast.success(message);
     } catch (err) {
-      setError(err.message || "Something went wrong");
+      const message = err.message || "Something went wrong";
+      setError(message);
+      toast.error(message);
     } finally {
       setLoading(false);
     }

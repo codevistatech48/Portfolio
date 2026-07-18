@@ -2,6 +2,7 @@ import { Bell, CheckCheck, Inbox } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { io } from "socket.io-client";
 import API_URL from "../Config/api";
+import { toast } from "react-toastify";
 
 const formatTime = (value) => {
   if (!value) return "Just now";
@@ -32,6 +33,10 @@ export default function NotificationMenu({ endpoint = "/api/auth/notifications",
 
         return [notification, ...current];
       });
+
+      const title = notification.title || "New notification";
+      const message = notification.message || notification.body || "You have a new update.";
+      toast.info(`${title}: ${message}`);
     });
 
     return () => socket.disconnect();

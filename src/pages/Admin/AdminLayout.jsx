@@ -1,11 +1,44 @@
-import { LayoutDashboard, Users, FileText, FolderKanban, CreditCard, Image, Newspaper, BarChart3, Bell, Settings, Activity, LogOut, Menu, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Link, Navigate, NavLink, Outlet, useNavigate } from "react-router-dom";
 import API_URL from "../../Config/api";
 import NotificationMenu from "../../components/NotificationMenu";
 
+import {
+  LayoutDashboard,
+  Users,
+  FileText,
+  GitPullRequest,
+  FolderKanban,
+  CreditCard,
+  Image,
+  Newspaper,
+  BarChart3,
+  Bell,
+  Settings,
+  Activity,
+  LogOut,
+  Menu,
+  X,
+} from "lucide-react";
+
 const links = [
-  ["Dashboard", "/admin", LayoutDashboard], ["Users", "/admin/users", Users], ["SRS Requests", "/admin/srs", FileText], ["Projects", "/admin/projects", FolderKanban], ["Payments", "/admin/payments", CreditCard], ["Invoices", "/admin/invoices", CreditCard], ["Revenue", "/admin/revenue", BarChart3], ["Portfolio", "/admin/portfolio", Image], ["Blogs", "/admin/blogs", Newspaper], ["Analytics", "/admin/analytics", BarChart3], ["Notifications", "/admin/notifications", Bell], ["Settings", "/admin/settings", Settings], ["Activity Logs", "/admin/activity", Activity],
+  ["Dashboard", "/admin", LayoutDashboard],
+  ["Users", "/admin/users", Users],
+  ["SRS Requests", "/admin/srs", FileText],
+
+  // NEW
+  ["Revision Requests", "/admin/revisions", GitPullRequest],
+
+  ["Projects", "/admin/projects", FolderKanban],
+  ["Payments", "/admin/payments", CreditCard],
+  ["Invoices", "/admin/invoices", CreditCard],
+  ["Revenue", "/admin/revenue", BarChart3],
+  ["Portfolio", "/admin/portfolio", Image],
+  ["Blogs", "/admin/blogs", Newspaper],
+  ["Analytics", "/admin/analytics", BarChart3],
+  ["Notifications", "/admin/notifications", Bell],
+  ["Settings", "/admin/settings", Settings],
+  ["Activity Logs", "/admin/activity", Activity],
 ];
 
 export default function AdminLayout() {

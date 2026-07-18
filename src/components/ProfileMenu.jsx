@@ -2,6 +2,7 @@ import { ChevronDown, LogOut, User } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import API_URL from "../Config/api";
+import { toast } from "react-toastify";
 
 function getTokenClaims() {
   const token = localStorage.getItem("userToken");
@@ -62,6 +63,7 @@ export default function ProfileMenu() {
     localStorage.removeItem("userToken");
     window.dispatchEvent(new Event("auth-changed"));
     localStorage.removeItem("userProfile");
+    toast.success("You have been logged out successfully.");
     navigate("/", { replace: true });
   };
 

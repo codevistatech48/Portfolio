@@ -2,6 +2,7 @@ import { ArrowLeft, Lock, Eye, Shield, KeyRound } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useSearchParams, useNavigate, Link } from "react-router-dom";
 import API_URL from "../../../Config/api";
+import { toast } from "react-toastify";
 
 export default function ResetPassword() {
   const [searchParams] = useSearchParams();
@@ -54,10 +55,14 @@ export default function ResetPassword() {
         throw new Error(data.message || "Failed to reset password");
       }
 
-      setSuccess("Password has been reset successfully! Redirecting to login...");
+      const message = "Password has been reset successfully! Redirecting to login...";
+      setSuccess(message);
+      toast.success(message);
       setTimeout(() => navigate("/login", { replace: true }), 2500);
     } catch (err) {
-      setError(err.message || "Something went wrong");
+      const message = err.message || "Something went wrong";
+      setError(message);
+      toast.error(message);
     } finally {
       setLoading(false);
     }
