@@ -2,6 +2,8 @@ import { ChevronDown, CircleHelp, Mail, MessageSquareText, Phone } from "lucide-
 import { useState } from "react";
 import Footer from "../../components/Footer/footer";
 import API_URL from "../../Config/api";
+
+console.log("API_URL:", API_URL);
 const supportEmail = "codevistatech48@gmail.com";
 const supportPhone = "+91 8787041668";
 
