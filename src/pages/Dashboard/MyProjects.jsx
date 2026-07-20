@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { ArrowLeft, FolderOpen, Download, Clock, Calendar, CheckCircle, AlertCircle, Loader2 } from "lucide-react";
+import { ArrowLeft, FolderOpen, Clock, Calendar, CheckCircle, AlertCircle, Loader2 } from "lucide-react";
 import API_URL from "../../Config/api";
 
 const STATUS_COLORS = {
@@ -125,27 +125,12 @@ export default function MyProjects() {
                     </Link>
 
                     {project.srsRequest?.id && (
-                      <>
-                        <button
-                          onClick={() =>
-                            window.open(
-                              `${API_URL}/api/auth/srs-requests/${project.srsRequest.id}/download`,
-                              "_blank"
-                            )
-                          }
-                          className="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-4 py-2.5 text-sm font-semibold transition hover:bg-white/10"
-                        >
-                          <Download size={14} />
-                          Download SRS
-                        </button>
-
-                        <button
-                          onClick={() => navigate(`/projects/${project.id}/revision`)}
-                          className="inline-flex items-center gap-2 rounded-xl border border-amber-500/30 bg-amber-500/10 px-4 py-2.5 text-sm font-semibold text-amber-300 hover:bg-amber-500/20"
-                        >
-                          ✏️ Request Changes
-                        </button>
-                      </>
+                      <button
+                        onClick={() => navigate(`/projects/${project.id}/revision`)}
+                        className="inline-flex items-center gap-2 rounded-xl border border-amber-500/30 bg-amber-500/10 px-4 py-2.5 text-sm font-semibold text-amber-300 hover:bg-amber-500/20"
+                      >
+                        ✏️ Request Changes
+                      </button>
                     )}
                   </div>
                 </div>
