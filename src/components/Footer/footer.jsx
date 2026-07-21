@@ -9,10 +9,10 @@ function Footer() {
           <div>
             <div className="mb-5 flex items-center gap-3">
               <div className="flex h-12 w-12 items-center justify-center overflow-hidden rounded-2xl border border-white/10 bg-white/5">
-                <img src={logo} alt={`${ "CodeVista"} Logo`} className="h-10 w-10 object-contain" />
+                <img src={logo} alt={`${ "CodeVisions"} Logo`} className="h-10 w-10 object-contain" />
               </div>
               <h2 className="text-3xl font-bold tracking-tight text-white">
-                <span className="text-violet-400">{"CodeVista"}</span>
+                <span className="text-violet-400">{"CodeVisions"}</span>
               </h2>
             </div>
 
@@ -71,7 +71,7 @@ function Footer() {
         </div>
 
         <div className="mt-14 border-t border-white/5 pt-6 text-center text-sm text-slate-500">
-          © 2026 CodeVista. All Rights Reserved.
+          © 2026 CodeVisions. All Rights Reserved.
         </div>
       </div>
     </footer>

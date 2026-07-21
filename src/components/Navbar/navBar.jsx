@@ -30,7 +30,7 @@ function Navbar() {
           </div>
           <div className="leading-none">
             <h2 className="text-[1.7rem] font-bold tracking-tight text-white">
-              <span className="text-violet-400">{"CodeVista"}</span>
+              <span className="text-violet-400">{"CodeVisions"}</span>
             </h2>
           </div>
         </Link>
