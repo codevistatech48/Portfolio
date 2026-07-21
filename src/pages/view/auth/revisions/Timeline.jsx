@@ -2,11 +2,13 @@ import {
   CheckCircle2,
   Circle,
   Clock3,
+  XCircle,
+  GitMerge,
 } from "lucide-react";
 
 const WORKFLOW = [
   {
-    key: "submitted",
+    key: "pending",
     label: "Revision Submitted",
   },
   {
@@ -18,32 +20,22 @@ const WORKFLOW = [
     label: "Approved",
   },
   {
-    key: "development",
-    label: "Development",
-  },
-  {
-    key: "testing",
-    label: "Testing",
-  },
-  {
-    key: "completed",
-    label: "Completed",
-  },
-  {
     key: "merged",
     label: "Merged",
   },
 ];
 
 const STATUS_ORDER = {
+  pending: 0,
   submitted: 0,
   under_review: 1,
   approved: 2,
-  development: 3,
-  testing: 4,
-  completed: 5,
-  merged: 6,
-  rejected: 2,
+  revision_development: 2,
+  revision_testing: 2,
+  revision_completed: 2,
+  ready_for_merge: 2,
+  merged: 3,
+  rejected: 1,
 };
 
 export default function Timeline({
@@ -54,6 +46,9 @@ export default function Timeline({
     STATUS_ORDER[
       revision.workflowStatus
     ] ?? 0;
+
+  const isRejected =
+    revision.workflowStatus === "rejected";
 
   return (
     <div className="space-y-8">
@@ -82,6 +77,8 @@ export default function Timeline({
                 ${
                   finished
                     ? "bg-green-500"
+                    : isRejected
+                    ? "bg-red-500/30"
                     : "bg-white/10"
                 }`}
               />
@@ -92,14 +89,22 @@ export default function Timeline({
             <div
               className={`z-10 flex h-9 w-9 items-center justify-center rounded-full border
               ${
-                finished
+                isRejected
+                  ? "border-red-500 bg-red-500/20 text-red-400"
+                  : finished && step.key === "merged"
+                  ? "border-purple-500 bg-purple-500 text-white"
+                  : finished
                   ? "border-green-500 bg-green-500 text-white"
                   : active
                   ? "border-yellow-400 bg-yellow-500/20 text-yellow-300"
                   : "border-white/10 bg-[#151D35] text-slate-500"
               }`}
             >
-              {finished ? (
+              {isRejected ? (
+                <XCircle size={18} />
+              ) : finished && step.key === "merged" ? (
+                <GitMerge size={18} />
+              ) : finished ? (
                 <CheckCircle2 size={18} />
               ) : active ? (
                 <Clock3 size={18} />
@@ -115,7 +120,9 @@ export default function Timeline({
               <h3
                 className={`font-semibold
                 ${
-                  finished || active
+                  isRejected
+                    ? "text-red-400"
+                    : finished || active
                     ? "text-white"
                     : "text-slate-500"
                 }`}

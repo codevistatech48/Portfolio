@@ -12,7 +12,30 @@ import {
 import { useEffect, useState } from "react";
 import API_URL from "../../../Config/api";
 
-export default function ProjectModal({ project, onClose, onUpdated }) {
+const PROJECT_WORKFLOW = [
+    "accepted",
+    "planning",
+    "ui_design",
+    "development",
+    "testing",
+    "deployment",
+    "completed",
+];
+
+const REVISION_WORKFLOW = ["pending", "under_review", "approved", "merged"];
+
+const LEGACY_REVISION_STAGE_MAP = {
+    revision_development: "approved",
+    revision_testing: "approved",
+    revision_completed: "approved",
+    ready_for_merge: "approved",
+};
+
+function formatStatus(status) {
+    return String(status || "pending").replaceAll("_", " ");
+}
+
+export default function ProjectModal({ project, onClose, onUpdated, onStatusUpdated }) {
     const [activeTab, setActiveTab] = useState("overview");
     const [saving, setSaving] = useState(false);
 
@@ -20,6 +43,8 @@ export default function ProjectModal({ project, onClose, onUpdated }) {
     const [developers, setDevelopers] = useState([]);
     const [loadingDevelopers, setLoadingDevelopers] = useState(false);
     const [searchDeveloper, setSearchDeveloper] = useState("");
+    const [activeRevision, setActiveRevision] = useState(null);
+    const [updatingStage, setUpdatingStage] = useState(false);
 
     const [formData, setFormData] = useState({
         name: "",
@@ -50,6 +75,36 @@ export default function ProjectModal({ project, onClose, onUpdated }) {
             adminNotes: project.adminNotes || "",
             assignedTeam: project.assignedTeam || [],
         });
+    }, [project]);
+
+    useEffect(() => {
+        const loadActiveRevision = async () => {
+            const srsId = project?.srsRequest?._id || project?.srsRequest;
+
+            if (project?.workflowMode !== "revision" || !srsId) {
+                setActiveRevision(null);
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_URL}/api/srs/${srsId}/revisions`, {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem("userToken")}`,
+                    },
+                    credentials: "include",
+                });
+                const data = await response.json();
+
+                if (!response.ok) throw new Error(data.message || "Unable to load revision.");
+
+                const revisions = data.data?.revisions || data.revisions || [];
+                setActiveRevision(revisions.find((revision) => !["merged", "rejected"].includes(revision.workflowStatus)) || null);
+            } catch (err) {
+                alert(err.message);
+            }
+        };
+
+        loadActiveRevision();
     }, [project]);
 
     // Automatically fetch developers when the Team tab is active
@@ -177,6 +232,8 @@ function handleChange(e) {
     async function saveProject() {
         try {
             setSaving(true);
+            const projectData = { ...formData };
+            delete projectData.status;
             const response = await fetch(`${API_URL}/api/admin/projects/${project._id}`, {
                 method: "PATCH",
                 headers: {
@@ -184,7 +241,7 @@ function handleChange(e) {
                     Authorization: `Bearer ${localStorage.getItem("userToken")}`,
                 },
                 credentials: "include",
-                body: JSON.stringify(formData),
+                body: JSON.stringify(projectData),
             });
 
             const data = await response.json();
@@ -202,6 +259,59 @@ function handleChange(e) {
         }
     }
 
+    async function updateProjectStage(status) {
+        try {
+            setUpdatingStage(true);
+            const response = await fetch(`${API_URL}/api/admin/projects/${project._id}/status`, {
+                method: "PATCH",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${localStorage.getItem("userToken")}`,
+                },
+                credentials: "include",
+                body: JSON.stringify({ status }),
+            });
+            const data = await response.json();
+
+            if (!response.ok) throw new Error(data.message || "Unable to update project status.");
+
+            setFormData((previous) => ({ ...previous, status }));
+            onStatusUpdated?.();
+        } catch (err) {
+            alert(err.message);
+        } finally {
+            setUpdatingStage(false);
+        }
+    }
+
+    async function updateRevisionStage(status) {
+        if (!activeRevision?._id) return;
+
+        try {
+            setUpdatingStage(true);
+            const response = await fetch(`${API_URL}/api/srs/revisions/${activeRevision._id}/status`, {
+                method: "PATCH",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${localStorage.getItem("userToken")}`,
+                },
+                credentials: "include",
+                body: JSON.stringify({ status }),
+            });
+            const data = await response.json();
+
+            if (!response.ok) throw new Error(data.message || "Unable to update revision status.");
+
+            setActiveRevision(data.data || data.revision || null);
+            onStatusUpdated?.();
+            if (status === "merged") onUpdated();
+        } catch (err) {
+            alert(err.message);
+        } finally {
+            setUpdatingStage(false);
+        }
+    }
+
     const tabs = [
         { id: "overview", label: "Overview", icon: User },
         { id: "team", label: "Team", icon: Users },
@@ -210,6 +320,30 @@ function handleChange(e) {
         { id: "srs", label: "SRS", icon: FileText },
         { id: "activity", label: "Activity", icon: Activity },
     ];
+
+    const isRevisionMode = project?.workflowMode === "revision";
+    const currentProjectStage = PROJECT_WORKFLOW.indexOf(formData.status);
+    const currentRevisionStatus = LEGACY_REVISION_STAGE_MAP[activeRevision?.workflowStatus] || activeRevision?.workflowStatus;
+    const currentRevisionStage = REVISION_WORKFLOW.indexOf(currentRevisionStatus);
+    const currentStatus = isRevisionMode ? currentRevisionStatus : formData.status;
+    const previousStage = isRevisionMode
+        ? REVISION_WORKFLOW[currentRevisionStage - 1]
+        : PROJECT_WORKFLOW[currentProjectStage - 1];
+    const nextStage = isRevisionMode
+        ? REVISION_WORKFLOW[currentRevisionStage + 1]
+        : PROJECT_WORKFLOW[currentProjectStage + 1];
+
+    function moveToPreviousStage() {
+        if (!previousStage) return;
+        if (isRevisionMode) updateRevisionStage(previousStage);
+        else updateProjectStage(previousStage);
+    }
+
+    function moveToNextStage() {
+        if (!nextStage) return;
+        if (isRevisionMode) updateRevisionStage(nextStage);
+        else updateProjectStage(nextStage);
+    }
 
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm">
@@ -285,21 +419,28 @@ function handleChange(e) {
                                         </div>
 
                                         <div>
-                                            <label className="mb-2 block text-sm font-medium text-slate-300">Status</label>
-                                            <select
-                                                name="status"
-                                                value={formData.status}
-                                                onChange={handleChange}
-                                                className="w-full rounded-xl border border-white/10 bg-[#0B1120] px-4 py-3 text-white"
-                                            >
-                                                <option value="planning">Planning</option>
-                                                <option value="ui_design">UI Design</option>
-                                                <option value="development">Development</option>
-                                                <option value="testing">Testing</option>
-                                                <option value="deployment">Deployment</option>
-                                                <option value="completed">Completed</option>
-                                                <option value="cancelled">Cancelled</option>
-                                            </select>
+                                            <p className="mb-2 text-sm font-medium text-slate-300">Current Status</p>
+                                            <div className="flex flex-wrap items-center gap-3">
+                                                <span className="rounded-full border border-violet-400/30 bg-violet-500/15 px-3 py-2 text-sm font-semibold capitalize text-violet-200">
+                                                    {formatStatus(currentStatus)}
+                                                </span>
+                                                <button
+                                                    type="button"
+                                                    onClick={moveToPreviousStage}
+                                                    disabled={!previousStage || updatingStage}
+                                                    className="rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm font-medium text-slate-200 transition hover:bg-white/10 disabled:cursor-not-allowed disabled:opacity-40"
+                                                >
+                                                    Previous Stage
+                                                </button>
+                                                <button
+                                                    type="button"
+                                                    onClick={moveToNextStage}
+                                                    disabled={!nextStage || updatingStage}
+                                                    className="rounded-xl bg-violet-600 px-3 py-2 text-sm font-medium text-white transition hover:bg-violet-700 disabled:cursor-not-allowed disabled:opacity-40"
+                                                >
+                                                    Next Stage
+                                                </button>
+                                            </div>
                                         </div>
                                     </div>
 

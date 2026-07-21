@@ -31,8 +31,9 @@ export default function RevisionReview() {
   const [timeline, setTimeline] = useState([]);
   const [developers, setDevelopers] = useState([]);
 
+  // Updated initial state default value to "pending"
   const [reviewData, setReviewData] = useState({
-    workflowStatus: "approved",
+    workflowStatus: "pending",
     estimatedCost: "",
     priority: "medium",
     developerId: "",
@@ -67,7 +68,6 @@ export default function RevisionReview() {
         throw new Error(data.message || "Unable to load revision.");
       }
 
-      // Safe Extraction: Check if data wrapper encapsulates the structure
       const targetRevision = data.revision || data.data?.revision || data.data;
       const targetDiff = data.diff || data.data?.diff || [];
       const targetTimeline = data.timeline || data.data?.timeline || [];
@@ -80,12 +80,12 @@ export default function RevisionReview() {
       setDiff(targetDiff);
       setTimeline(targetTimeline);
 
+      // Updated fallback logic assignment to "pending"
       setReviewData((prev) => ({
         ...prev,
-        workflowStatus: targetRevision.workflowStatus || "approved",
+        workflowStatus: targetRevision.workflowStatus || "pending",
         estimatedCost: targetRevision.estimatedCost !== undefined ? targetRevision.estimatedCost : "",
         priority: targetRevision.priority || "medium",
-        // Fixed: Explicit fallback ensures the field stays a controlled input string string
         developerId: targetRevision.assignedDeveloper?._id || "",
         reviewComment: targetRevision.reviewComment || "",
       }));
@@ -139,35 +139,49 @@ export default function RevisionReview() {
   | Submit Review
   |--------------------------------------------------------------------------
   */
-  async function handleReview(payload) {
-    try {
-      setSaving(true);
-      const token = localStorage.getItem("userToken");
+ async function handleReview(payload) {
+  try {
+    setSaving(true);
+    const token = localStorage.getItem("userToken");
 
-      const response = await fetch(
-        `${API_URL}/api/admin/revisions/${revisionId}/review`,
-        {
-          method: "PATCH",
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(payload),
-        }
-      );
+    // First review request
+    const isInitialReview = revision.workflowStatus === "pending";
 
-      const data = await response.json();
-      if (!response.ok) {
-        throw new Error(data.message || "Failed to update review status.");
-      }
+    const endpoint = isInitialReview
+      ? `${API_URL}/api/admin/revisions/${revisionId}/review`
+      : `${API_URL}/api/admin/revisions/${revisionId}/workflow-status`;
 
-      await fetchRevision();
-    } catch (err) {
-      alert(err.message);
-    } finally {
-      setSaving(false);
+    const body = isInitialReview
+      ? payload
+      : {
+          status: payload.workflowStatus,
+        };
+
+    console.log("Endpoint:", endpoint);
+    console.log("Body:", body);
+
+    const response = await fetch(endpoint, {
+      method: "PATCH",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(body),
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.message || "Failed to update review status.");
     }
+
+    await fetchRevision();
+  } catch (err) {
+    alert(err.message);
+  } finally {
+    setSaving(false);
   }
+}
 
   /*
   |--------------------------------------------------------------------------
@@ -201,11 +215,6 @@ export default function RevisionReview() {
     }
   }
 
-  /*
-  |--------------------------------------------------------------------------
-  | Loading Status View
-  |--------------------------------------------------------------------------
-  */
   if (loading) {
     return (
       <div className="flex h-[70vh] items-center justify-center">
@@ -214,21 +223,12 @@ export default function RevisionReview() {
     );
   }
 
-  /*
-  |--------------------------------------------------------------------------
-  | Error Status View
-  |--------------------------------------------------------------------------
-  */
   if (error || !revision) {
     return (
       <div className="rounded-2xl border border-red-500/20 bg-red-500/10 p-10 text-center">
         <AlertTriangle className="mx-auto mb-4 h-12 w-12 text-red-400" />
-        <h2 className="text-2xl font-bold text-white">
-          Failed to load revision
-        </h2>
-        <p className="mt-3 text-slate-400">
-          {error || "Revision details are unavailable."}
-        </p>
+        <h2 className="text-2xl font-bold text-white">Failed to load revision</h2>
+        <p className="mt-3 text-slate-400">{error || "Revision details are unavailable."}</p>
         <button
           onClick={fetchRevision}
           className="mt-6 rounded-xl bg-violet-600 px-6 py-3 text-white transition hover:bg-violet-700"
@@ -239,11 +239,6 @@ export default function RevisionReview() {
     );
   }
 
-  /*
-  |--------------------------------------------------------------------------
-  | Main Component Render
-  |--------------------------------------------------------------------------
-  */
   return (
     <div className="space-y-8">
       {/* Header */}
@@ -263,12 +258,8 @@ export default function RevisionReview() {
         </div>
 
         <div className="rounded-2xl border border-violet-500/20 bg-violet-500/10 px-6 py-4">
-          <p className="text-xs uppercase tracking-wider text-violet-300">
-            Revision Number
-          </p>
-          <h2 className="mt-2 text-3xl font-bold text-white">
-            #{revision.revisionNumber}
-          </h2>
+          <p className="text-xs uppercase tracking-wider text-violet-300">Revision Number</p>
+          <h2 className="mt-2 text-3xl font-bold text-white">#{revision.revisionNumber}</h2>
         </div>
       </div>
 
@@ -294,9 +285,7 @@ export default function RevisionReview() {
           <Calendar className="mb-4 text-green-400" size={26} />
           <p className="text-sm text-slate-400">Submitted</p>
           <h3 className="mt-2 text-lg font-semibold text-white">
-            {revision.requestedAt
-              ? new Date(revision.requestedAt).toLocaleDateString()
-              : "N/A"}
+            {revision.requestedAt ? new Date(revision.requestedAt).toLocaleDateString() : "N/A"}
           </h3>
         </div>
 
@@ -324,9 +313,7 @@ export default function RevisionReview() {
       {/* Summary */}
       <div className="rounded-2xl border border-white/10 bg-[#0D1225] p-8">
         <h2 className="mb-5 text-2xl font-bold text-white">Change Summary</h2>
-        <p className="leading-8 text-slate-300">
-          {revision.changeSummary || "No summary provided."}
-        </p>
+        <p className="leading-8 text-slate-300">{revision.changeSummary || "No summary provided."}</p>
       </div>
 
       {/* Main Grid */}
@@ -346,25 +333,38 @@ export default function RevisionReview() {
           </div>
 
           {/* Comments Component */}
-          <CommentsPanel
-            comments={revision.comments || []}
-            saving={saving}
-            onSend={handleComment}
-          />
+          <CommentsPanel comments={revision.comments || []} saving={saving} onSend={handleComment} />
         </div>
 
         {/* Right column */}
         <div className="space-y-8">
-          <div className="sticky top-24 rounded-2xl border border-white/10 bg-[#0D1225] p-8">
-            <h2 className="mb-6 text-2xl font-bold text-white">Review Request</h2>
-            <ReviewForm
-              reviewData={reviewData}
-              setReviewData={setReviewData}
-              developers={developers}
-              saving={saving}
-              onSubmit={handleReview}
-            />
-          </div>
+          {/* Conditional Workflow Sidebar: Checks active workflow status states */}
+          {["pending", "under_review"].includes(revision.workflowStatus) ? (
+            <div className="sticky top-24 rounded-2xl border border-white/10 bg-[#0D1225] p-8">
+              <h2 className="mb-6 text-2xl font-bold text-white">
+                {revision.workflowStatus === "under_review" ? "Final Decision" : "Review Request"}
+              </h2>
+              <ReviewForm
+                reviewData={reviewData}
+                setReviewData={setReviewData}
+                developers={developers}
+                saving={saving}
+                onSubmit={handleReview}
+                workflowStatus={revision.workflowStatus}
+              />
+            </div>
+          ) : (
+            <div className="sticky top-24 rounded-2xl border border-white/10 bg-[#0D1225] p-8 text-center">
+              <h2 className="mb-3 text-xl font-bold text-white">Review Concluded</h2>
+              <p className="text-sm text-slate-400">
+                This workflow history is complete. Current status is{" "}
+                <span className="font-semibold capitalize text-violet-400">
+                  {revision.workflowStatus.replace("_", " ")}
+                </span>
+                .
+              </p>
+            </div>
+          )}
         </div>
       </div>
 

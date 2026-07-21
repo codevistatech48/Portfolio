@@ -1,6 +1,6 @@
- import { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { ArrowLeft, Download, Calendar, TrendingUp, Users, FolderOpen, GitPullRequest, CheckCircle, XCircle, Clock, BarChart3, RefreshCw } from "lucide-react";
+import { ArrowLeft, Download, Calendar, TrendingUp, Users, FolderOpen, GitPullRequest, CheckCircle, XCircle, Clock, BarChart3 } from "lucide-react";
 import API_URL from "../../Config/api";
 import { toast } from "react-toastify";
 import {
@@ -35,7 +35,7 @@ function Skeleton({ className = "" }) {
   return <div className={`animate-pulse rounded bg-white/10 ${className}`} />;
 }
 
-export default function AdminAnalytics() {
+export default function Analytics() {
   const [analytics, setAnalytics] = useState(null);
   const [charts, setCharts] = useState({});
   const [loading, setLoading] = useState(true);
@@ -140,7 +140,7 @@ export default function AdminAnalytics() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#090D1C] text-white p-8">
+      <main className="min-h-screen bg-[#090D1C] text-white p-8">
         <div className="mx-auto max-w-7xl space-y-6">
           <Skeleton className="h-12 w-64" />
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
@@ -150,21 +150,21 @@ export default function AdminAnalytics() {
           </div>
           <Skeleton className="h-96" />
         </div>
-      </div>
+      </main>
     );
   }
 
   if (error) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-[#090D1C] text-white">
+      <main className="min-h-screen bg-[#090D1C] text-white flex items-center justify-center">
         <div className="text-center">
           <p className="text-lg text-red-400">{error}</p>
-          <Link to="/admin" className="mt-4 inline-flex items-center gap-2 text-violet-400 hover:text-violet-300">
+          <Link to="/dashboard" className="mt-4 inline-flex items-center gap-2 text-violet-400 hover:text-violet-300">
             <ArrowLeft size={16} />
-            Back to Admin
+            Back to Dashboard
           </Link>
         </div>
-      </div>
+      </main>
     );
   }
 
@@ -183,7 +183,7 @@ export default function AdminAnalytics() {
   ];
 
   return (
-    <div className="min-h-screen bg-[#090D1C] text-white">
+    <main className="min-h-screen bg-[#090D1C] text-white">
       <div className="pointer-events-none fixed inset-0 opacity-20" style={{ backgroundImage: "linear-gradient(rgba(255,255,255,.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.05) 1px, transparent 1px)", backgroundSize: "64px 64px" }} />
       <div className="pointer-events-none fixed -left-44 top-16 h-[420px] w-[420px] rounded-full bg-violet-700/20 blur-[120px]" />
       <div className="pointer-events-none fixed -right-44 bottom-0 h-[420px] w-[420px] rounded-full bg-fuchsia-700/20 blur-[120px]" />
@@ -192,9 +192,9 @@ export default function AdminAnalytics() {
         {/* Header */}
         <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
           <div>
-            <Link to="/admin" className="mb-4 inline-flex items-center gap-2 text-sm text-violet-400 hover:text-violet-300 transition">
+            <Link to="/dashboard" className="mb-4 inline-flex items-center gap-2 text-sm text-violet-400 hover:text-violet-300 transition">
               <ArrowLeft size={16} />
-              Back to Admin
+              Back to Dashboard
             </Link>
             <h1 className="text-4xl font-bold">Analytics Dashboard</h1>
             <p className="mt-2 text-gray-400">Comprehensive insights and metrics</p>
@@ -228,14 +228,6 @@ export default function AdminAnalytics() {
             >
               <Download size={16} />
               Export JSON
-            </button>
-
-            <button
-              onClick={fetchAnalytics}
-              disabled={loading}
-              className="rounded-xl border border-white/10 bg-white/5 p-3 hover:bg-white/10 disabled:opacity-50"
-            >
-              <RefreshCw size={18} className={loading ? "animate-spin" : ""} />
             </button>
           </div>
         </div>
@@ -420,6 +412,6 @@ export default function AdminAnalytics() {
           </div>
         </div>
       </div>
-    </div>
+    </main>
   );
 }
