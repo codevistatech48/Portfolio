@@ -12,6 +12,8 @@ const STATUS_COLORS = {
   completed: "bg-green-500/20 text-green-400 border-green-500/30",
   active: "bg-emerald-500/20 text-emerald-400 border-emerald-500/30",
   cancelled: "bg-red-500/20 text-red-400 border-red-500/30",
+  revision_under_review: "bg-amber-500/20 text-amber-400 border-amber-500/30",
+  revision_approved: "bg-green-500/20 text-green-400 border-green-500/30",
 };
 
 function SkeletonCard() {
@@ -41,6 +43,7 @@ export default function MyProjects() {
           headers: { Authorization: `Bearer ${token}` },
         });
         const data = await res.json();
+        console.log("Fetched projects:", data); // Debugging line
         if (!res.ok) throw new Error(data.message || "Failed to load projects");
         setProjects(data.data || []);
       } catch (err) {
@@ -124,29 +127,7 @@ export default function MyProjects() {
                       View Details
                     </Link>
 
-                    {project.srsRequest?.id && (
-                      <>
-                        <button
-                          onClick={() =>
-                            window.open(
-                              `${API_URL}/api/auth/srs-requests/${project.srsRequest.id}/download`,
-                              "_blank"
-                            )
-                          }
-                          className="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-4 py-2.5 text-sm font-semibold transition hover:bg-white/10"
-                        >
-                          <Download size={14} />
-                          Download SRS
-                        </button>
-
-                        <button
-                          onClick={() => navigate(`/projects/${project.id}/revision`)}
-                          className="inline-flex items-center gap-2 rounded-xl border border-amber-500/30 bg-amber-500/10 px-4 py-2.5 text-sm font-semibold text-amber-300 hover:bg-amber-500/20"
-                        >
-                          ✏️ Request Changes
-                        </button>
-                      </>
-                    )}
+                   
                   </div>
                 </div>
               );

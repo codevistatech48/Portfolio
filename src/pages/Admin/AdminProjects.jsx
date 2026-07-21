@@ -178,6 +178,8 @@ export default function AdminProjects() {
               <option value="deployment">Deployment</option>
               <option value="completed">Completed</option>
               <option value="cancelled">Cancelled</option>
+              <option value="revision_under_review">Revision Under Review</option>
+              <option value="revision_approved">Revision Approved</option>
             </select>
 
           </div>
@@ -265,6 +267,7 @@ export default function AdminProjects() {
             loadProjects();
             setSelectedProject(null);
           }}
+          onStatusUpdated={loadProjects}
         />
       )}
 

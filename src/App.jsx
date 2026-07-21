@@ -23,6 +23,9 @@ import AdminProjects from "./pages/Admin/AdminProjects";
 import AdminVisualResource from "./pages/Admin/AdminVisualResource";
 import RevisionReview from "./pages/view/auth/revisions/RevisionReview";
 import AdminUsers from "./pages/Admin/AdminUsers";
+import Analytics from "./pages/Dashboard/Analytics";
+import DeveloperAnalytics from "./pages/Dashboard/DeveloperAnalytics";
+import UserAnalytics from "./pages/Dashboard/UserAnalytics";
 import API_URL from "./Config/api";
 import AuthPage from "./pages/view/auth/AuthPage";
 import ForgotPassword from "./pages/view/auth/ForgotPassword";
@@ -186,6 +189,30 @@ function App() {
           element={
             <ProtectedRoute>
               <ProjectDetails />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/analytics"
+          element={
+            <ProtectedRoute>
+              <Analytics />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/developer-analytics"
+          element={
+            <ProtectedRoute>
+              <DeveloperAnalytics />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/my-analytics"
+          element={
+            <ProtectedRoute>
+              <UserAnalytics />
             </ProtectedRoute>
           }
         />
