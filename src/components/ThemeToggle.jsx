@@ -2,13 +2,14 @@ import { useTheme } from "../context/ThemeContext";
 import { Moon, Sun } from "lucide-react";
 
 export default function ThemeToggle() {
-  const { theme, toggleTheme } = useTheme();
+  const { theme } = useTheme();
 
   return (
     <button
-      onClick={toggleTheme}
-      className="relative inline-flex h-9 w-16 items-center rounded-full border border-white/10 bg-white/5 p-1 transition-colors duration-400 hover:border-white/20"
-      aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
+      onClick={() => {}}
+      className="relative inline-flex h-9 w-16 items-center rounded-full border border-white/10 bg-white/5 p-1 transition-colors duration-400 cursor-not-allowed hover:border-white/20 opacity-80"
+      aria-label="Theme switching feature will be enabled later"
+      title="This feature will be enabled later"
     >
       {/* Sliding indicator */}
       <span
@@ -23,7 +24,7 @@ export default function ThemeToggle() {
           <Sun size={14} className="text-amber-500" />
         )}
       </span>
-      
+
       {/* Background glow */}
       <span className="absolute inset-0 rounded-full bg-gradient-to-r from-blue-500/20 to-violet-500/20 blur-md" />
     </button>
