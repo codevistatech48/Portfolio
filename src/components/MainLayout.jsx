@@ -5,7 +5,9 @@ export default function MainLayout() {
   return (
     <>
       <Navbar />
-      <Outlet />
+      <main className="relative" style={{ isolation: "isolate" }}>
+        <Outlet />
+      </main>
     </>
   );
 }
