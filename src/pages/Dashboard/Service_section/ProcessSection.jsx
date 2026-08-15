@@ -186,58 +186,143 @@ const steps = [
   },
 ];
 
+const AUTO_PLAY_INTERVAL = 7000;
+
 export default function ProcessSection() {
   const [activeStep, setActiveStep] = useState(0);
   const sectionRef = useRef(null);
   const stepRefs = useRef([]);
+  const autoPlayRef = useRef(null);
+  const hoverRef = useRef(false);
   const userClickedRef = useRef(false);
+  const prefersReducedMotion = typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-  // Manual click handler - takes priority over scroll-based activation
+  // Check if section is visible
+  const [isVisible, setIsVisible] = useState(true);
+  const visibilityRef = useRef(true);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          setIsVisible(entry.isIntersecting);
+          visibilityRef.current = entry.isIntersecting;
+        });
+      },
+      { threshold: 0.5 }
+    );
+
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current);
+    }
+
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
+
+  // Auto-play effect
+  useEffect(() => {
+    if (prefersReducedMotion || !isVisible) {
+      if (autoPlayRef.current) {
+        clearInterval(autoPlayRef.current);
+        autoPlayRef.current = null;
+      }
+      return;
+    }
+
+    // Start auto-play
+    autoPlayRef.current = setInterval(() => {
+      setActiveStep((prev) => {
+        const next = (prev + 1) % steps.length;
+        return next;
+      });
+    }, AUTO_PLAY_INTERVAL);
+
+    return () => clearInterval(autoPlayRef.current);
+  }, [isVisible, prefersReducedMotion]);
+
+  // Reset timer on manual click
   const handleStepClick = (index) => {
     userClickedRef.current = true;
     setActiveStep(index);
+
+    // Reset the auto-play timer
+    if (autoPlayRef.current) {
+      clearInterval(autoPlayRef.current);
+      autoPlayRef.current = setInterval(() => {
+        setActiveStep((prev) => {
+          const next = (prev + 1) % steps.length;
+          return next;
+        });
+      }, AUTO_PLAY_INTERVAL);
+    }
   };
 
-  // Scroll-based activation - only on mobile vertical layout, respects manual selection
+  // Hover pause on desktop
   useEffect(() => {
-    // Only run scroll-based activation for mobile (vertical layout)
-    const handleResize = () => {
-      if (window.innerWidth < 1024 && !userClickedRef.current) {
-        const observer = new IntersectionObserver(
-          (entries) => {
-            entries.forEach((entry) => {
-              if (entry.isIntersecting && !userClickedRef.current) {
-                const index = stepRefs.current.indexOf(entry.target);
-                if (index !== -1) {
-                  setActiveStep(index);
-                }
-              }
+    if (window.innerWidth >= 1024) {
+      const handleMouseEnter = () => {
+        hoverRef.current = true;
+        if (autoPlayRef.current) {
+          clearInterval(autoPlayRef.current);
+          autoPlayRef.current = null;
+        }
+      };
+
+      const handleMouseLeave = () => {
+        hoverRef.current = false;
+        // Only restart if user hasn't clicked
+        if (!userClickedRef.current && isVisible && !prefersReducedMotion) {
+          autoPlayRef.current = setInterval(() => {
+            setActiveStep((prev) => {
+              const next = (prev + 1) % steps.length;
+              return next;
             });
-          },
-          {
-            threshold: 0.5,
-            rootMargin: "-20% 0px -20% 0px"
-          }
-        );
+          }, AUTO_PLAY_INTERVAL);
+        }
+      };
 
-        stepRefs.current.forEach((ref) => {
-          if (ref) observer.observe(ref);
-        });
+      sectionRef.current.addEventListener("mouseenter", handleMouseEnter);
+      sectionRef.current.addEventListener("mouseleave", handleMouseLeave);
 
-        return () => observer.disconnect();
+      return () => {
+        sectionRef.current.removeEventListener("mouseenter", handleMouseEnter);
+        sectionRef.current.removeEventListener("mouseleave", handleMouseLeave);
+      };
+    }
+  }, [isVisible, prefersReducedMotion, userClickedRef]);
+
+  // Progress value for the active step (0 to 1)
+  const progress = useRef(0);
+
+  useEffect(() => {
+    if (prefersReducedMotion || !isVisible || hoverRef.current) {
+      progress.current = 0;
+      return;
+    }
+
+    // Reset progress when step changes
+    progress.current = 0;
+
+    const interval = setInterval(() => {
+      progress.current = Math.min(progress.current + 0.01, 1);
+      if (progress.current >= 1) {
+        clearInterval(interval);
       }
-    };
+    }, AUTO_PLAY_INTERVAL / 100);
 
-    // Initial setup
-    handleResize();
-
-    // Listen to resize to enable/disable observer
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
+    return () => clearInterval(interval);
+  }, [activeStep, isVisible, prefersReducedMotion, hoverRef]);
 
   return (
-    <section id="process" className="relative bg-[#080C1B] py-32 overflow-hidden" ref={sectionRef}>
+    <section
+      id="process"
+      ref={sectionRef}
+      className="relative bg-[#080C1B] py-32 overflow-hidden"
+      onMouseEnter={() => (hoverRef.current = true)}
+      onMouseLeave={() => (hoverRef.current = false)}
+    >
       {/* Grid Background */}
       <div
         className="absolute inset-0 opacity-20"
@@ -280,6 +365,9 @@ export default function ProcessSection() {
               const isActive = index === activeStep;
               const isPast = index < activeStep;
 
+              // Calculate progress for this step
+              const stepProgress = isActive ? Math.min(progress.current, 1) : 0;
+
               return (
                 <button
                   key={step.id}
@@ -318,6 +406,11 @@ export default function ProcessSection() {
                       </p>
                     </div>
                   </div>
+
+                  {/* Progress indicator - thin line */}
+                  <div className={`absolute bottom-1 left-1/2 -translate-x-1/2 w-full h-0.5 transition-all duration-500 ${isActive ? 'bg-blue-400' : 'bg-transparent'}`}
+                    style={{ width: `${stepProgress * 100}%` }}
+                  />
                 </button>
               );
             })}
