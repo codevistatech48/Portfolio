@@ -1,80 +1,110 @@
-import { ArrowRight } from "lucide-react";
+import { useRef, useEffect, useState } from "react";
+import { ArrowRight, ArrowUpRight } from "lucide-react";
 
 export default function CTASection() {
-  return (
-    <section className="relative bg-[#080C1B] py-24 overflow-hidden">
+  const sectionRef = useRef(null);
+  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
 
-      {/* Background Grid */}
-      <div
-        className="absolute inset-0 opacity-20"
-        style={{
-          backgroundImage: `
+  useEffect(() => {
+    const handleMouseMove = (e) => {
+      if (window.innerWidth < 1024) return;
+      const x = (e.clientX / window.innerWidth - 0.5) * 2;
+      const y = (e.clientY / window.innerHeight - 0.5) * 2;
+      setMousePos({ x, y });
+    };
+
+    window.addEventListener("mousemove", handleMouseMove, { passive: true });
+    return () => window.removeEventListener("mousemove", handleMouseMove);
+  }, []);
+
+  const glowStyle = {
+    transform: `translate(${mousePos.x * 8}px, ${mousePos.y * 8}px)`,
+    transition: "transform 0.4s ease-out",
+  };
+
+  return (
+    <section id="contact" ref={sectionRef} className="relative bg-[#080C1B] py-32 overflow-hidden">
+      {/* Background Effects */}
+      <div className="absolute inset-0 pointer-events-none">
+        {/* Center electric-blue glow that follows cursor */}
+        <div
+          className="absolute left-1/2 top-1/2 h-[500px] w-[500px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-blue-600/15 blur-[120px]"
+          style={glowStyle}
+        />
+        
+        {/* Subtle purple accent */}
+        <div className="absolute right-10 top-10 h-[300px] w-[300px] rounded-full bg-violet-600/10 blur-[100px]" />
+        
+        {/* Technical grid */}
+        <div
+          className="absolute inset-0 opacity-20"
+          style={{
+            backgroundImage: `
             linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px),
             linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px)
-          `,
-          backgroundSize: "60px 60px",
-        }}
-      />
+            `,
+            backgroundSize: "60px 60px",
+          }}
+        />
 
-      <div className="relative max-w-[1500px] mx-auto px-8 lg:px-16">
+        {/* Concentric circles behind headline */}
+        <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
+          <div className="h-[420px] w-[420px] rounded-full border border-white/5" />
+          <div className="absolute inset-8 rounded-full border border-white/5" />
+          <div className="absolute inset-16 rounded-full border border-white/5" />
+        </div>
+      </div>
 
-        <div
-          className="
-            relative
-            overflow-hidden
-            rounded-[38px]
-            px-8
-            py-24
-            text-center
-            bg-gradient-to-r
-            from-[#5A4BFF]
-            via-[#7B3FF2]
-            to-[#A400E6]
-            shadow-[0_30px_80px_rgba(124,58,237,.35)]
-          "
-        >
-          {/* Glow */}
-          <div className="absolute -top-20 left-1/2 h-72 w-72 -translate-x-1/2 rounded-full bg-white/10 blur-[120px]" />
+      <div className="relative max-w-[1450px] mx-auto px-6 sm:px-8 lg:px-10">
+        <div className="relative mx-auto max-w-4xl text-center">
+          {/* Badge */}
+          <div className="animate-on-scroll mb-8 inline-flex items-center gap-2 rounded-full border border-blue-400/20 bg-blue-500/10 px-5 py-2.5 text-sm font-medium text-blue-200">
+            <span className="h-2 w-2 rounded-full bg-blue-400 animate-pulse" />
+            LET'S BUILD SOMETHING
+          </div>
 
-          <div className="relative z-10">
+          {/* Headline */}
+          <h2 className="animate-on-scroll text-white font-bold text-4xl md:text-5xl lg:text-6xl leading-tight mb-6">
+            Have an idea worth building?
+          </h2>
 
-            <h2 className="text-white font-bold text-5xl md:text-6xl leading-tight">
-              Ready to build something extraordinary?
-            </h2>
+          {/* Supporting text */}
+          <p className="animate-on-scroll text-slate-300 text-lg sm:text-xl max-w-2xl mx-auto leading-relaxed mb-10">
+            Let's turn your idea into a scalable digital product.
+          </p>
 
-            <p className="mt-8 text-white/85 text-xl max-w-3xl mx-auto leading-9">
-              Share your brief and get a complete Software Requirement
-              Specification (SRS) document along with an accurate project
-              estimate within 48 hours — completely free.
-            </p>
-
+          {/* CTA Buttons */}
+          <div className="animate-on-scroll flex flex-col sm:flex-row items-center justify-center gap-4">
+            {/* Primary CTA */}
             <button
-              className="
-                group
-                mt-12
-                inline-flex
-                items-center
-                gap-3
-                rounded-2xl
-                bg-white
-                px-12
-                py-5
-                text-xl
-                font-semibold
-                text-[#4F46E5]
-                transition-all
-                duration-300
-                hover:scale-105
-                hover:shadow-2xl
-              "
+              className="group relative inline-flex items-center justify-center gap-3 rounded-2xl bg-gradient-to-r from-blue-600 to-violet-600 px-10 py-5 text-lg font-semibold text-white shadow-[0_18px_40px_rgba(59,130,246,0.35)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_24px_55px_rgba(59,130,246,0.50)] active:translate-y-0 active:scale-[0.98]"
             >
-              Get your free quote
+              {/* Glow effect on hover */}
+              <span className="absolute inset-0 rounded-2xl bg-gradient-to-r from-blue-500 to-violet-500 opacity-0 transition-opacity duration-300 group-hover:opacity-100 blur-xl" />
+              
+              <span className="relative flex items-center gap-3">
+                Start a Project
+                <ArrowRight
+                  size={20}
+                  className="transition-transform duration-300 group-hover:translate-x-1"
+                />
+              </span>
+            </button>
 
-              <ArrowRight
-                size={24}
-                className="transition-transform duration-300 group-hover:translate-x-1"
+            {/* Secondary CTA */}
+            <button className="group inline-flex items-center gap-2 rounded-2xl border border-white/10 bg-white/5 px-8 py-5 text-lg font-semibold text-white/90 backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:border-blue-400/35 hover:bg-white/10">
+              Tell us about your idea
+              <ArrowUpRight
+                size={18}
+                className="transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
               />
             </button>
+          </div>
+
+          {/* Availability indicator */}
+          <div className="animate-on-scroll mt-10 inline-flex items-center gap-2 text-sm text-slate-400">
+            <span className="h-2 w-2 rounded-full bg-emerald-400" />
+            Available for new projects
           </div>
         </div>
       </div>

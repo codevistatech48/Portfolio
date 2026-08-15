@@ -5,6 +5,43 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "./index.css";
 
+// Global scroll reveal observer
+if (typeof window !== "undefined" && "IntersectionObserver" in window) {
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("is-visible");
+          observer.unobserve(entry.target);
+        }
+      });
+    },
+    { threshold: 0.1, rootMargin: "0px 0px -50px 0px" }
+  );
+
+  // Observe elements after DOM is ready
+  const observeElements = () => {
+    document.querySelectorAll(".animate-on-scroll").forEach((el) => {
+      if (!el.classList.contains("is-visible")) {
+        observer.observe(el);
+      }
+    });
+  };
+
+  // Initial observation
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", observeElements);
+  } else {
+    observeElements();
+  }
+
+  // Re-observe on route changes
+  const routeObserver = new MutationObserver(() => {
+    observeElements();
+  });
+  routeObserver.observe(document.body, { childList: true, subtree: true });
+}
+
 ReactDOM.createRoot(document.getElementById("root")).render(
   <BrowserRouter>
     <App />
