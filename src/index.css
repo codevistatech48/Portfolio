@@ -237,3 +237,57 @@ body {
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; animation-duration: .01ms !important; }
 }
+
+
+/* Process Swiper */
+
+.process-swiper {
+  width: 100%;
+  overflow: hidden;
+}
+
+.process-swiper .swiper-slide {
+  height: auto;
+  display: flex;
+}
+
+.process-swiper .swiper-slide > div {
+  width: 100%;
+}
+
+/* Pagination */
+.process-swiper .swiper-pagination {
+  position: relative;
+  margin-top: 24px;
+  bottom: auto !important;
+}
+
+.process-swiper .swiper-pagination-bullet {
+  width: 8px;
+  height: 6px;
+  border-radius: 999px;
+  opacity: 1;
+  background: rgba(255, 255, 255, 0.15);
+  transition: all 0.3s ease;
+}
+
+.process-swiper .swiper-pagination-bullet-active {
+  width: 32px;
+  background: linear-gradient(
+    90deg,
+    #3b82f6,
+    #8b5cf6
+  );
+}
+
+/* Prevent navigation buttons from affecting layout */
+.process-prev,
+.process-next {
+  cursor: pointer;
+}
+
+.process-prev.swiper-button-disabled,
+.process-next.swiper-button-disabled {
+  opacity: 0.35;
+  pointer-events: none;
+}

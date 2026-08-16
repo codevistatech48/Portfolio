@@ -1,6 +1,7 @@
 import { useRef, useEffect, useState } from "react";
 import { ArrowRight, ExternalLink, BrainCircuit, Cloud, Code2, LayoutDashboard, Zap } from "lucide-react";
 import useMouseParallax from "../../../hooks/useMouseParallax";
+import { Link } from "react-router-dom";
 
 function Hero() {
   const tiltRef = useRef(null);
@@ -57,20 +58,39 @@ function Hero() {
           </p>
 
           {/* CTA Buttons */}
-          <div className="animate-on-scroll mt-10 flex flex-col gap-4 sm:flex-row sm:items-center">
-            <button className="group relative inline-flex items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-blue-600 to-violet-600 px-7 py-4 text-base font-semibold text-white shadow-[0_18px_40px_rgba(59,130,246,0.35)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_24px_55px_rgba(59,130,246,0.50)]">
-              <span className="absolute inset-0 rounded-2xl bg-gradient-to-r from-blue-500 to-violet-500 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
-              <span className="relative flex items-center gap-2">
-                Start a project
-                <ArrowRight size={18} className="transition-transform duration-300 group-hover:translate-x-1" />
-              </span>
-            </button>
+     <div className="animate-on-scroll mt-10 flex flex-col gap-4 sm:flex-row sm:items-center">
 
-            <button className="group inline-flex items-center justify-center gap-2 rounded-2xl border border-white/10 bg-white/5 px-7 py-4 text-base font-semibold text-white/90 backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:border-blue-400/35 hover:bg-white/10">
-              Explore our work
-              <ExternalLink size={17} className="transition-transform duration-300 group-hover:translate-x-1" />
-            </button>
-          </div>
+  {/* Start a Project → Login */}
+  <Link
+    to="/login"
+    className="group relative inline-flex items-center justify-center gap-2 overflow-hidden rounded-2xl bg-gradient-to-r from-blue-600 to-violet-600 px-7 py-4 text-base font-semibold text-white shadow-[0_18px_40px_rgba(59,130,246,0.35)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_24px_55px_rgba(59,130,246,0.50)]"
+  >
+    <span className="absolute inset-0 rounded-2xl bg-gradient-to-r from-blue-500 to-violet-500 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+
+    <span className="relative flex items-center gap-2">
+      Start a project
+
+      <ArrowRight
+        size={18}
+        className="transition-transform duration-300 group-hover:translate-x-1"
+      />
+    </span>
+  </Link>
+
+  {/* Explore Our Work → Projects */}
+  <Link
+    to="/projects"
+    className="group inline-flex items-center justify-center gap-2 rounded-2xl border border-white/10 bg-white/5 px-7 py-4 text-base font-semibold text-white/90 backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:border-blue-400/35 hover:bg-white/10"
+  >
+    Explore our work
+
+    <ExternalLink
+      size={17}
+      className="transition-transform duration-300 group-hover:translate-x-1"
+    />
+  </Link>
+
+</div>
         </div>
 
         {/* Right Visual - Floating Panels */}

@@ -18,9 +18,9 @@ export default function About() {
         <div className="pointer-events-none absolute left-1/2 top-10 h-[30rem] w-[30rem] -translate-x-1/2 rounded-full bg-violet-600/15 blur-[140px]" />
         <div className="relative mx-auto max-w-[1150px]">
           <header className="mx-auto max-w-3xl text-center">
-            <p className="text-sm font-semibold uppercase tracking-[0.28em] text-violet-400">About CodeVista</p>
+            <p className="text-sm font-semibold uppercase tracking-[0.28em] text-violet-400">About CodeVisions</p>
             <h1 className="mt-5 text-4xl font-bold tracking-tight sm:text-6xl">Digital products with <span className="bg-gradient-to-r from-violet-400 to-cyan-300 bg-clip-text text-transparent">real-world impact.</span></h1>
-            <p className="mt-6 text-lg leading-8 text-slate-400">CodeVista is a technology partner for teams ready to turn complex challenges into simple, scalable digital experiences.</p>
+            <p className="mt-6 text-lg leading-8 text-slate-400">CodeVisions is a technology partner for teams ready to turn complex challenges into simple, scalable digital experiences.</p>
           </header>
 
           <section className="mt-20 grid gap-8 lg:grid-cols-[1.05fr_.95fr]">
