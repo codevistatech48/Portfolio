@@ -88,9 +88,8 @@ function Navbar() {
     <nav
       className="fixed left-0 right-0 top-0 z-[1000] w-full"
       style={{
-        height: "var(--navbar-height, 5.0rem)",
+        height: "var(--navbar-height, 5rem)",
         // paddingTop: "var(--navbar-offset, 0.3rem)",
-        isolation: "isolate",
       }}
     >
       <div
@@ -216,111 +215,152 @@ function Navbar() {
 
         {/* Mobile Actions */}
         <div className="flex items-center gap-2 lg:hidden">
-          <ThemeToggle />
+          {token && (
+            <ThemeToggle />
+          )}
 
           <button
-            type="button"
-            onClick={() => setMobileOpen((prev) => !prev)}
-            className="
-              flex h-10 w-10 items-center justify-center
-              rounded-xl border border-white/10
-              bg-white/5 text-white
-              transition-all duration-200
-              hover:bg-white/10
-              active:scale-95
-            "
-            aria-label={mobileOpen ? "Close menu" : "Open menu"}
-            aria-expanded={mobileOpen}
-          >
-            {mobileOpen ? <X size={22} /> : <Menu size={22} />}
-          </button>
+  type="button"
+  onClick={() => setMobileOpen((prev) => !prev)}
+  className={`
+    flex h-10 w-10 items-center justify-center
+    rounded-xl border
+    transition-all duration-200
+    active:scale-95
+
+    ${
+      isDark
+        ? "border-white/10 bg-white/5 text-white hover:bg-white/10"
+        : "border-blue-200 bg-blue-50 text-slate-700 hover:bg-blue-100"
+    }
+  `}
+  aria-label={mobileOpen ? "Close menu" : "Open menu"}
+  aria-expanded={mobileOpen}
+>
+  {mobileOpen ? <X size={22} /> : <Menu size={22} />}
+</button>
         </div>
       </div>
 
       {/* Mobile Menu */}
-      {mobileOpen && (
+     {mobileOpen && (
+      <div
+        className={`
+          fixed
+          left-4 right-4
+          top-[5.5rem]
+          z-[999999]
+          lg:hidden
+        `}
+      >
         <div
-          className="
-            absolute left-0 right-0
-            mt-2 px-4
-            lg:hidden
-          "
+          className={`
+            w-full
+            rounded-2xl
+            border
+            p-3
+            shadow-[0_25px_60px_rgba(0,0,0,0.35)]
+            ${
+              isDark
+                ? "border-white/10 bg-[#080b18]"
+                : "border-blue-200 bg-white"
+            }
+          `}
         >
-          <div
-            className={`
-  overflow-hidden rounded-2xl
-  p-3
-  shadow-[0_20px_50px_rgba(0,0,0,0.20)]
-  backdrop-blur-2xl
-  ${isDark
-                ? "border border-white/10 bg-[#080b18]/95"
-                : "border border-blue-100 bg-white/95"
-              }
-`}
-          >
-            <div className="flex flex-col gap-1">
-              <NavLink
-                to="/"
-                end
-                className={mobileNavLinkClass}
-              >
-                Home
-              </NavLink>
+          <div className="flex flex-col gap-1">
 
-              {token ? (
+            <NavLink
+              to="/"
+              end
+              className={mobileNavLinkClass}
+              onClick={() => setMobileOpen(false)}
+            >
+              Home
+            </NavLink>
+
+            {token ? (
+              <>
                 <NavLink
                   to="/my-projects"
                   className={mobileNavLinkClass}
+                  onClick={() => setMobileOpen(false)}
                 >
                   My Projects
                 </NavLink>
-              ) : (
-                <NavLink
-                  to="/projects"
-                  className={mobileNavLinkClass}
-                >
-                  Projects
-                </NavLink>
-              )}
 
-              {token && (
                 <NavLink
                   to="/srs"
                   className={mobileNavLinkClass}
+                  onClick={() => setMobileOpen(false)}
                 >
                   SRS Request
                 </NavLink>
-              )}
 
-              <NavLink
-                to="/about"
-                className={mobileNavLinkClass}
-              >
-                About
-              </NavLink>
+                <NavLink
+                  to="/about"
+                  className={mobileNavLinkClass}
+                  onClick={() => setMobileOpen(false)}
+                >
+                  About
+                </NavLink>
 
-              <NavLink
-                to="/support"
-                className={mobileNavLinkClass}
-              >
-                Support
-              </NavLink>
-            </div>
+                <NavLink
+                  to="/support"
+                  className={mobileNavLinkClass}
+                  onClick={() => setMobileOpen(false)}
+                >
+                  Support
+                </NavLink>
+              </>
+            ) : (
+              <>
+                <NavLink
+                  to="/projects"
+                  className={mobileNavLinkClass}
+                  onClick={() => setMobileOpen(false)}
+                >
+                  Projects
+                </NavLink>
 
-            {/* Mobile Account Actions */}
-            <div className="mt-3 border-t border-white/10 pt-3">
-              {token ? (
-                <div className="flex items-center justify-between gap-3">
-                  <NotificationMenu />
-                  <ProfileMenu />
-                </div>
-              ) : (
-                <AuthButton />
-              )}
-            </div>
+                <NavLink
+                  to="/about"
+                  className={mobileNavLinkClass}
+                  onClick={() => setMobileOpen(false)}
+                >
+                  About
+                </NavLink>
+
+                <NavLink
+                  to="/support"
+                  className={mobileNavLinkClass}
+                  onClick={() => setMobileOpen(false)}
+                >
+                  Support
+                </NavLink>
+              </>
+            )}
+
+          </div>
+
+          {/* Account */}
+          <div
+            className={`
+              mt-3 border-t pt-3
+              ${isDark ? "border-white/10" : "border-blue-100"}
+            `}
+          >
+            {token ? (
+              <div className="flex items-center justify-between gap-3">
+                <NotificationMenu />
+                <ProfileMenu />
+              </div>
+            ) : (
+              <AuthButton />
+            )}
           </div>
         </div>
-      )}
+      </div>
+    )}
     </nav>
   );
 }
