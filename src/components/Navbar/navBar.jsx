@@ -189,10 +189,10 @@ function Navbar() {
           )}
           {!token && (
             <NavLink to="/support" className={navLinkClass}>
-            Support
-          </NavLink>
+              Support
+            </NavLink>
           )}
-          
+
         </div>
 
 
@@ -220,147 +220,154 @@ function Navbar() {
           )}
 
           <button
-  type="button"
-  onClick={() => setMobileOpen((prev) => !prev)}
-  className={`
+            type="button"
+            onClick={() => setMobileOpen((prev) => !prev)}
+            className={`
     flex h-10 w-10 items-center justify-center
     rounded-xl border
     transition-all duration-200
     active:scale-95
 
-    ${
-      isDark
-        ? "border-white/10 bg-white/5 text-white hover:bg-white/10"
-        : "border-blue-200 bg-blue-50 text-slate-700 hover:bg-blue-100"
-    }
+    ${isDark
+                ? "border-white/10 bg-white/5 text-white hover:bg-white/10"
+                : "border-blue-200 bg-blue-50 text-slate-700 hover:bg-blue-100"
+              }
   `}
-  aria-label={mobileOpen ? "Close menu" : "Open menu"}
-  aria-expanded={mobileOpen}
->
-  {mobileOpen ? <X size={22} /> : <Menu size={22} />}
-</button>
+            aria-label={mobileOpen ? "Close menu" : "Open menu"}
+            aria-expanded={mobileOpen}
+          >
+            {mobileOpen ? <X size={22} /> : <Menu size={22} />}
+          </button>
         </div>
       </div>
 
       {/* Mobile Menu */}
-     {mobileOpen && (
-      <div
-        className={`
+      {mobileOpen && (
+        <div
+          className={`
           fixed
           left-4 right-4
           top-[5.5rem]
           z-[999999]
           lg:hidden
         `}
-      >
-        <div
-          className={`
+        >
+          <div
+            className={`
             w-full
             rounded-2xl
             border
             p-3
             shadow-[0_25px_60px_rgba(0,0,0,0.35)]
-            ${
-              isDark
+            ${isDark
                 ? "border-white/10 bg-[#080b18]"
                 : "border-blue-200 bg-white"
-            }
+              }
           `}
-        >
-          <div className="flex flex-col gap-1">
+          >
+            <div className="flex flex-col gap-1">
 
-            <NavLink
-              to="/"
-              end
-              className={mobileNavLinkClass}
-              onClick={() => setMobileOpen(false)}
-            >
-              Home
-            </NavLink>
+              <NavLink
+                to="/"
+                end
+                className={mobileNavLinkClass}
+                onClick={() => setMobileOpen(false)}
+              >
+                Home
+              </NavLink>
 
-            {token ? (
-              <>
-                <NavLink
-                  to="/my-projects"
-                  className={mobileNavLinkClass}
-                  onClick={() => setMobileOpen(false)}
-                >
-                  My Projects
-                </NavLink>
+              {token ? (
+                <>
+                  <NavLink
+                    to="/my-projects"
+                    className={mobileNavLinkClass}
+                    onClick={() => setMobileOpen(false)}
+                  >
+                    My Projects
+                  </NavLink>
 
-                <NavLink
-                  to="/srs"
-                  className={mobileNavLinkClass}
-                  onClick={() => setMobileOpen(false)}
-                >
-                  SRS Request
-                </NavLink>
+                  <NavLink
+                    to="/srs"
+                    className={mobileNavLinkClass}
+                    onClick={() => setMobileOpen(false)}
+                  >
+                    SRS Request
+                  </NavLink>
 
-                <NavLink
-                  to="/about"
-                  className={mobileNavLinkClass}
-                  onClick={() => setMobileOpen(false)}
-                >
-                  About
-                </NavLink>
+                 {!token && (
+                    <>
+                      <NavLink
+                        to="/about"
+                        className={mobileNavLinkClass}
+                        onClick={() => setMobileOpen(false)}
+                      >
+                        About
+                      </NavLink>
 
-                <NavLink
-                  to="/support"
-                  className={mobileNavLinkClass}
-                  onClick={() => setMobileOpen(false)}
-                >
-                  Support
-                </NavLink>
-              </>
-            ) : (
-              <>
-                <NavLink
-                  to="/projects"
-                  className={mobileNavLinkClass}
-                  onClick={() => setMobileOpen(false)}
-                >
-                  Projects
-                </NavLink>
+                      <NavLink
+                        to="/support"
+                        className={mobileNavLinkClass}
+                        onClick={() => setMobileOpen(false)}
+                      >
+                        Support
+                      </NavLink>
+                    </>
+                  )}
 
-                <NavLink
-                  to="/about"
-                  className={mobileNavLinkClass}
-                  onClick={() => setMobileOpen(false)}
-                >
-                  About
-                </NavLink>
+                </>
+              ) : (
+                <>
+                  <NavLink
+                    to="/projects"
+                    className={mobileNavLinkClass}
+                    onClick={() => setMobileOpen(false)}
+                  >
+                    Projects
+                  </NavLink>
+                  {!token && (
+                    <>
+                      <NavLink
+                        to="/about"
+                        className={mobileNavLinkClass}
+                        onClick={() => setMobileOpen(false)}
+                      >
+                        About
+                      </NavLink>
 
-                <NavLink
-                  to="/support"
-                  className={mobileNavLinkClass}
-                  onClick={() => setMobileOpen(false)}
-                >
-                  Support
-                </NavLink>
-              </>
-            )}
+                      <NavLink
+                        to="/support"
+                        className={mobileNavLinkClass}
+                        onClick={() => setMobileOpen(false)}
+                      >
+                        Support
+                      </NavLink>
+                    </>
+                  )}
 
-          </div>
+                </>
+              )}
 
-          {/* Account */}
-          <div
-            className={`
+            </div>
+
+            {/* Account */}
+            <div
+              className={`
               mt-3 border-t pt-3
               ${isDark ? "border-white/10" : "border-blue-100"}
             `}
-          >
-            {token ? (
-              <div className="flex items-center justify-between gap-3">
-                <NotificationMenu />
-                <ProfileMenu />
-              </div>
-            ) : (
-              <AuthButton />
-            )}
+            >
+              {token ? (
+                <div className="flex items-center justify-between gap-3">
+                  <NotificationMenu />
+                  <ProfileMenu />
+                </div>
+              ) : (
+                <AuthButton />
+              )}
+            </div>
           </div>
         </div>
-      </div>
-    )}
+      )}
     </nav>
   );
 }
